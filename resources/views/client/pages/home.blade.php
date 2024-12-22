@@ -55,21 +55,51 @@
             <div class="empty-space h35-xs h50-md"></div>
             <div class="services small text-center">
                 <div class="row">
-                    @foreach($categories->take(4) as $index => $category)
-                    <div class="col-sm-6 col-md-3">
-                        <div class="icon-wrapper">
-                           <a href="#" class="icon">
-                                <img src="{{asset('administrator/img/service-img-'. ($index+=1) .'.png')}}" alt="">
-                            </a> 
+                    @foreach($categories->take(4) as $category)
+                        @php
+                            $image = file_exists(public_path('images/category-images/' . $category->image)) 
+                                ? asset('images/category-images/' . $category->image) 
+                                : asset('images/image-not-found.png');
+                        @endphp
+                        <div class="col-sm-6 col-md-3">
+                            <div class="icon-wrapper">
+                                <a href="#" class="icon">
+                                    <img src="{{ $image }}" alt="{{ $category->name }}" class="category-image">
+                                </a>
+                            </div>
+                            <div class="article-wrapper" style="margin-top: 10px">
+                                <article>
+                                    <a href="{{ route('client.product.category', ['id' => $category->id]) }}">
+                                        <h6 class="h8 hover-3">{{ $category->name }}</h6>
+                                    </a>
+                                    <p>Quisque with placerat Porttitor nisi felis Congue in & Tempus</p>
+                                </article>
+                            </div>
                         </div>
-                        <div class="article-wrapper">
-                            <article>
-                                <a href="{{route('client.product.category',['id'=> $category->id])}}"><h6 class="h8 hover-3">{{$category -> name }}</h6></a>
-                                {{-- <p>Quisque with placerat Porttitor nisi felis Congue in & Tempus</p> --}}
-                            </article>
-                        </div>
-                    </div>
                     @endforeach
+                    <style>
+                        .icon-wrapper {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            width: 100%;
+                            height: 130px; 
+                            margin-bottom: 10px;
+                        }
+                        .category-image {
+                            width: 70px; 
+                            height: 70px;
+                            border-radius: 50%; 
+                            object-fit: cover; 
+                        }
+                        .services .icon img {
+                            position: absolute;
+                            left: 50%;
+                            top: 50%;
+                            margin-left: -34px;
+                            margin-top: -35px;
+                        }
+                    </style>
 
                 </div>
             </div>
