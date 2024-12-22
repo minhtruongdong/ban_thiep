@@ -10,7 +10,7 @@
                     <!-- login -->
                     <div class="login-wrapper">
                         <div class="login open-popup" data-rel="2">Log in &#47; Sing up</div>
-                    </div> 
+                    </div>
                     <!-- basket -->
 
                     @php
@@ -44,7 +44,7 @@
                             </ul>
                         </li>
                         <li><a href="checkout.html">Checkout</a></li>
-                        <li><a href="contact.html">Contact us</a></li>
+                        <li><a href="{{route('client.contact')}}">Contact us</a></li>
                     </ul>
                 </div>
             </div>

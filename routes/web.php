@@ -37,25 +37,25 @@ Route::middleware(CheckLogin::class)->group(function(){
 
         Route::prefix('category') -> name('category.') ->controller(CategoryController::class)->group(function(){
             Route::get('index','index')->name('index');
-    
+
             Route::get('create','create')->name('create');
             Route::post('store', 'store')->name('store');
-    
+
             Route::get('edit/{id}', 'edit')->name('edit');
             Route::post('update/{id}', 'update')->name('update');
-    
+
             Route::get('destroy/{id}', 'destroy')->name('destroy');
         });
-    
+
         Route::prefix('product') -> name('product.') ->controller(ProductController::class)->group(function(){
             Route::get('index','index')->name('index');
-    
+
             Route::get('create','create')->name('create');
             Route::post('store', 'store')->name('store');
-    
+
             Route::get('edit/{id}', 'edit')->name('edit');
             Route::post('update/{id}', 'update')->name('update');
-    
+
             Route::get('destroy/{id}', 'destroy')->name('destroy');
 
             Route::post('upload-file/{id}', 'uploadFile')->name('uploadFile');
@@ -63,16 +63,16 @@ Route::middleware(CheckLogin::class)->group(function(){
 
             Route::get('search','search')->name('search');
         });
-        
+
         Route::prefix('user') -> name('user.') ->controller(UserController::class)->group(function(){
             Route::get('index','index')->name('index');
-    
+
             Route::get('create','create')->name('create');
             Route::post('store', 'store')->name('store');
-    
+
             Route::get('edit/{id}', 'edit')->name('edit');
             Route::post('update/{id}', 'update')->name('update');
-    
+
             Route::get('destroy/{id}', 'destroy')->name('destroy');
         });
     });
@@ -88,7 +88,7 @@ Route::prefix('client')->name('client.')->group(function(){
     Route::get('savePrice',[ClientController::class,'savePrice'])->name('savePrice');
 
     Route::get('/them-gio-hang/{id}/{quantity}',[CartController::class,'addToCart'])->name('addToCart');
-    
+
     Route::get('/gio-hang',[CartController::class,'cart'])->name('cart');
     Route::get('xoa-gio-hang/{id}',[CartController::class,'cartDelete'])->name('cartDelete');
     Route::post('cap-nhat-gio-hang/',[CartController::class,'cartUpdate'])->name('cartUpdate');
@@ -98,16 +98,11 @@ Route::prefix('client')->name('client.')->group(function(){
     Route::prefix('product') -> name('product.') ->controller(ClientProductController::class)->group(function(){
         Route::get('/the-loai/{id}','category')->name('category');
         Route::get('/chi-tiet-san-pham/{id}','productdetail')->name('productdetail');
-    
+        Route::post('/{id}/save-custom-image', 'saveCustomImage')->name('saveCustomImage');
     });
 
 
 
 
- 
+
 });
-
-
-
-
-

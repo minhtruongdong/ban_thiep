@@ -2,7 +2,7 @@
     <div class="wide-container-fluid">
         <div class="row">
             <div class="col-xs-2">
-                <a class="logo" href="{{route('client.index')}}"><img src="{{asset('administrator/img/logo.png')}}" alt="" /></a>  
+                <a class="logo" href="{{route('client.index')}}"><img src="{{asset('administrator/img/logo.png')}}" alt="" /></a>
             </div>
             <div class="col-xs-10 text-right">
 
@@ -25,7 +25,7 @@
                     </li>
 
                     <li><a href="checkout.html"><span>Checkout</span></a></li>
-                    <li><a href="contact.html"><span>Contact us</span></a></li>
+                    <li><a href="{{route('client.contact')}}"><span>Contact us</span></a></li>
                 </ul>
 
                 <!-- basket -->
@@ -43,7 +43,7 @@
                 <!-- login -->
                 <div class="login-wrapper">
                     <div class="login open-popup" data-rel="2"><span>Log in &#47; Sing up</span></div>
-                </div>     
+                </div>
 
                 <div class="hamburger-icon">
                     <span></span>
