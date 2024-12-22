@@ -18,8 +18,8 @@ class ClientProductController extends Controller
 
         $products = Product::with('category')->where('category_id',$id)->paginate(9);
 
-       
-        
+
+
         return view('client.pages.product.shop',[
             'category' => $category,
             'category_list' => $category_list,
@@ -27,7 +27,7 @@ class ClientProductController extends Controller
             'id' => $id
         ]
     );
-    } 
+    }
 
     public function productdetail($id){
 
@@ -46,5 +46,54 @@ class ClientProductController extends Controller
             'category_list'=>$category_list,
             'id'=> $id
         ]);
+    }
+    public function saveCustomImage(Request $request, $id){
+        try {
+            $product = Product::findOrFail($id);
+
+            // Validate input
+            $request->validate([
+                'image' => 'required',
+                'recipient_name' => 'required|string',
+                'custom_message' => 'required|string',
+            ]);
+
+            $imageData = $request->input('image');
+            
+            // Tách dữ liệu base64
+            list($type, $imageData) = explode(';', $imageData);
+            list(, $imageData) = explode(',', $imageData);
+            $imageData = base64_decode($imageData);
+
+            // Tạo tên file
+            $fileName = 'product_' . $id . '_custom_' . time() . '.png';
+            
+            // Đường dẫn tới thư mục custom_images trong public
+            $path = public_path('custom_images');
+            
+            // Kiểm tra và tạo thư mục nếu chưa tồn tại
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+
+            // Lưu file
+            file_put_contents($path . '/' . $fileName, $imageData);
+
+            // Đường dẫn để truy cập file
+            $filePath = asset('custom_images/' . $fileName);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Lưu ảnh thành công',
+                'file_name' => $fileName,
+                'file_path' => $filePath
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
