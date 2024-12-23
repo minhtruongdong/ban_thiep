@@ -28,6 +28,7 @@ class ClientController extends Controller
         ->where('featured',1)
         ->first(); 
         // dd($products_lastest->toArray());
+        
         return view('client.pages.home',[
             'categories'=> $categories,
             'products_lastest'=> $products_lastest,

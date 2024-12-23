@@ -84,8 +84,6 @@
                                         </ul>
                                     </div>
 
-
-
                                     <!-- Form tùy chỉnh sản phẩm -->
                                     <div id="customProductForm"
                                         style="display: none; margin-top: 20px; border: 1px solid #ccc; padding: 20px; border-radius: 8px;">
@@ -112,23 +110,19 @@
                                                 <textarea id="customMessage" name="custom_message" class="form-control"
                                                     rows="4" placeholder="Nhập lời chúc"></textarea>
                                             </div>
-
+                                            <div class="form-group text-right">
+                                                <button type="button" id="generateImage" class="btn btn-success"
+                                                    data-product-id="{{ $products->id }}"
+                                                    data-save-url="{{ route('client.product.saveCustomImage', ['id' => $products->id]) }}"
+                                                    data-csrf="{{ csrf_token() }}">
+                                                    Xác nhận
+                                                </button>
+                                                <button type="button" id="cancelCustomForm"
+                                                    class="btn btn-secondary">Hủy</button>
+                                                </div>
                                         </form>
-                                        <div class="form-group text-right">
-                                        <button type="button" id="generateImage" class="btn btn-success"
-                                            data-product-id="{{ $products->id }}"
-                                            data-save-url="{{ route('client.product.saveCustomImage', ['id' => $products->id]) }}"
-                                            data-csrf="{{ csrf_token() }}">
-                                            Xác nhận
-                                        </button>
-                                        <button type="button" id="cancelCustomForm"
-                                            class="btn btn-secondary">Hủy</button>
-                                        </div>
+                                        
                                     </div>
-
-
-
-
 
                             <form action="{{ route('client.savePrice') }}" method="POST">
                                 @csrf
@@ -371,7 +365,7 @@
 
                     <div class="empty-space h20-xs h35-md"></div>
 
-                    <h6 class="h6">BRANDS</h6>
+                    {{-- <h6 class="h6">BRANDS</h6>
                     <div class="empty-space h10-xs"></div>
                     <label class="checkbox-entry">
                         <input type="checkbox" /><span>Black&White</span>
@@ -393,7 +387,7 @@
                     </label>
                     <label class="checkbox-entry">
                         <input type="checkbox" /><span>Poliform</span>
-                    </label>
+                    </label> --}}
 
                     <div class="empty-space h50-xs"></div>
                     <div class="btn-wrap"><a href="#" class="btn-2"><span>clear all filters</span></a></div>
@@ -411,4 +405,89 @@
 </div>
 <!-- content -->
 
+<script>
+    // Hiển thị hoặc Ẩn Form tùy chỉnh
+document.getElementById('customProductBtn').addEventListener('click', function () {
+    const form = document.getElementById('customProductForm');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+});
+
+// Ẩn Form khi nhấn nút Hủy
+document.getElementById('cancelCustomForm').addEventListener('click', function () {
+    const form = document.getElementById('customProductForm');
+    form.style.display = 'none';
+});
+
+// Cập nhật nội dung tùy chỉnh trực tiếp khi nhập
+document.getElementById('recipientName').addEventListener('input', function () {
+    document.querySelector('.recipient-name').textContent = this.value;
+});
+
+document.getElementById('customMessage').addEventListener('input', function () {
+    document.querySelector('.custom-message').textContent = this.value;
+});
+document.getElementById('generateImage').addEventListener('click', function () {
+    const productId = this.dataset.productId; // ID sản phẩm
+    const saveUrl = this.dataset.saveUrl;    // URL để lưu hình ảnh
+    const csrfToken = this.dataset.csrf;    // CSRF Token
+
+    // Lấy nội dung người dùng nhập
+    const recipientName = document.getElementById('recipientName').value;
+    const customMessage = document.getElementById('customMessage').value;
+
+    // Lấy DOM phần hiển thị ảnh và nội dung
+    const productDisplay = document.getElementById('productDisplay');
+
+    // Tạo canvas để kết hợp hình ảnh và text
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+
+    // Thiết lập kích thước canvas giống với hình ảnh
+    const productImage = document.getElementById('productImage');
+    canvas.width = productImage.width;
+    canvas.height = productImage.height;
+
+    // Vẽ hình ảnh lên canvas
+    context.drawImage(productImage, 0, 0, canvas.width, canvas.height);
+
+    // Thêm text (Tên người nhận và lời chúc)
+    context.font = '24px Arial';
+    context.fillStyle = '#fff';
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+    context.fillText(recipientName, canvas.width / 2, canvas.height / 2 - 20);
+    context.fillText(customMessage, canvas.width / 2, canvas.height / 2 + 20);
+
+    // Chuyển canvas sang định dạng ảnh (Base64)
+    const imageData = canvas.toDataURL('image/png');
+
+    // Gửi ảnh qua AJAX hoặc fetch
+    fetch(saveUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({
+            image: imageData, // Ảnh đã mã hóa Base64
+            recipient_name: recipientName,
+            custom_message: customMessage,
+            product_id: productId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Hình ảnh đã được lưu thành công!');
+        } else {
+            alert('Có lỗi xảy ra khi lưu hình ảnh. Vui lòng thử lại!');
+        }
+    })
+    .catch(error => {
+        console.error('Lỗi:', error);
+        alert('Có lỗi xảy ra khi kết nối đến server.');
+    });
+});
+
+</script>
 @endsection
