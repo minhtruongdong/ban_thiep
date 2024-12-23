@@ -160,7 +160,7 @@
                             <div class="btn-wrap"><a href="#" class="btn-1 border"><span>add to
                                         favourites</span></a></div>
                             <div class="follow-category">
-                                <span>Category:</span>
+                                <span>Category›:</span>
                                 <a href="{{route('client.product.category',['id'=>$products->category->id])}}"
                                     class="category">
                                     {{$products->category->name}}
