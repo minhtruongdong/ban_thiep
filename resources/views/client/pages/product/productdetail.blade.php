@@ -36,11 +36,37 @@
                                 <img class="img-main" src="{{asset('images/'.$products->image)}}" alt="" height="500px">
                                 <div class="img-preview">
                                     @foreach($products->product_image as $pi)
-                                    <img src="{{asset('images/'. $pi->image)}}" alt="">
+                                        <img class="img-detail-preview" src="{{asset('images/'. $pi->image)}}" data-image="{{asset('images/'. $pi->image)}}" alt="">
                                     @endforeach
                                 </div>
                                 <div class="clear"></div>
                             </div>
+
+                            <script>
+                                const mainImage = document.querySelector(".img-main");
+                                const thumbnails = document.querySelectorAll(".img-detail-preview");
+
+                                // Hàm để thay đổi hình ảnh chính
+                                function changeMainImage(thumbnail) {
+                                    const newImageSrc = thumbnail.getAttribute("data-image");
+                                    const oldImageSrc = mainImage.src;
+                                    const popupImage = document.getElementById('popupImage');
+                                    // Cập nhật hình ảnh chính
+                                    mainImage.src = newImageSrc;
+                                    // Cập nhật ảnh trong pop-up
+                                    popupImage.src = mainImage.src;
+                                    // Cập nhật ảnh nhỏ hiện tại
+                                    thumbnail.src = oldImageSrc; // Thay thế ảnh nhỏ hiện tại bằng ảnh lớn cũ
+
+                                    // Cập nhật lại thuộc tính data-image cho ảnh nhỏ
+                                    thumbnail.setAttribute("data-image", oldImageSrc);
+                                }
+
+                                // Thêm sự kiện click cho các hình ảnh thu nhỏ ban đầu
+                                thumbnails.forEach(thumbnail => {
+                                    thumbnail.addEventListener("click", () => changeMainImage(thumbnail));
+                                });
+                            </script>
                             <div class="col-md-5">
                                 <article class="description">
                                     <h3 class="h3">{{ $products->name}}</h3>
@@ -92,7 +118,7 @@
                                             @csrf
                                             <!-- Hiển thị sản phẩm -->
                                             <div id="productDisplay" style="position: relative; margin-top: 20px;">
-                                                <img id="productImage" src="{{ asset('images/' . $products->image) }}"
+                                                <img id="popupImage" 
                                                     alt="Product Image" style="width: 100%; height: auto;">
                                                 <div id="customTextDisplay"
                                                     style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; font-weight: bold; color: #fff; text-align: center; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);">
@@ -123,6 +149,7 @@
                                         </form>
                                         
                                     </div>
+                                    <script></script>
 
                             <form action="{{ route('client.savePrice') }}" method="POST">
                                 @csrf
@@ -320,7 +347,7 @@
 
                     <div class="empty-space h35-xs"></div>
 
-                    <h6 class="h6">FOR WHO</h6>
+                    {{-- <h6 class="h6">FOR WHO</h6>
                     <div class="empty-space h10-xs"></div>
                     <label class="checkbox-entry">
                         <input type="checkbox" /><span>For women</span>
@@ -330,7 +357,7 @@
                     </label>
                     <label class="checkbox-entry">
                         <input type="checkbox" /><span>For kids</span>
-                    </label>
+                    </label> --}}
 
                     <div class="empty-space h30-xs h45-md"></div>
 

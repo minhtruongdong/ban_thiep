@@ -32,7 +32,7 @@ class CartController extends Controller
             'price' => $product->price,
             'quantity' => $quantity,
             'attributes' => array(
-                'image' => $product->image
+            'image' => $product->image
             )
         ));
 
