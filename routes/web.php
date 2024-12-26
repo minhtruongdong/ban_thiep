@@ -26,7 +26,7 @@ Route::prefix('auth')->name('auth.')->group(function(){
     Route::get('logout',[LoginController::class,'logout'])->name('logout');
 });
 
-Route::middleware(CheckLogin::class)->group(function(){
+// Route::middleware(CheckLogin::class)->group(function(){
     Route::prefix('admin') -> name('admin.' ) -> group(function(){
         Route::prefix('dash') -> name('dash.') ->controller(DashBoardController::class)->group(function(){
             Route::get('index','index')->name('index');
@@ -76,7 +76,7 @@ Route::middleware(CheckLogin::class)->group(function(){
             Route::get('destroy/{id}', 'destroy')->name('destroy');
         });
     });
-});
+// });
 
 
 

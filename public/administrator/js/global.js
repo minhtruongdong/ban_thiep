@@ -596,6 +596,7 @@ $(function() {
                         image: imageData,
                         recipient_name: $('#recipientName').val(),
                         custom_message: $('#customMessage').val(),
+                        save_to_carts: true,
                     },
                     success: function (response) {
                         alert('Hình ảnh đã được lưu thành công!');

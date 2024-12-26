@@ -33,7 +33,7 @@
     <li class="nav-item">
         <a class="nav-link d-flex align-items-center">
         <span class="mt-1 ms-1 sidebar-text">
-            User Name   :    {{Auth::user()->full_name}}
+            {{-- User Name   :    {{Auth::user()->full_name}} --}}
         </span>
         </a>
     </li>
