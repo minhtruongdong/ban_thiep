@@ -81,6 +81,7 @@ class ClientProductController extends Controller
 
             // Đường dẫn để truy cập file
             $filePath = asset('custom_images/' . $fileName);
+            
 
             return response()->json([
                 'success' => true,
