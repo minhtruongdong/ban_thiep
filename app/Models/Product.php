@@ -24,8 +24,7 @@ class Product extends Model
         return $this->hasMany(ProductImages::class);
     }
 
-     public function carts()
-    {
+     public function carts():HasMany{
         return $this->hasMany(Carts::class, 'product_id'); // 'product_id' là khóa ngoại trong bảng carts
     }
 }

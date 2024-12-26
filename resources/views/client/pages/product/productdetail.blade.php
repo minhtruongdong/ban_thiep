@@ -140,7 +140,7 @@
                                                 <button type="button" id="generateImage" class="btn btn-success"
                                                     data-product-id="{{ $products->id }}"
                                                     {{-- data-cart-id = {{$cart_id->id}} --}}
-                                                    data-save-url="{{ route('client.product.saveCustomImage', ['id' => $products->id])}}"
+                                                    data-save-url="{{ route('client.product.uploadImage', ['id' => $products->id])}}"
                                                     data-csrf="{{ csrf_token() }}">
                                                     Xác nhận
                                                 </button>

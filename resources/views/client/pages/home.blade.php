@@ -59,7 +59,8 @@
                     <div class="col-sm-6 col-md-3">
                         <div class="icon-wrapper">
                            <a href="#" class="icon">
-                                <img src="{{asset('administrator/img/service-img-'. ($index+=1) .'.png')}}" alt="">
+                                {{-- <img src="{{asset('administrator/img/service-img-'. ($index+=1) .'.png')}}" alt=""> --}}
+                                <img src="{{asset($category->image)}}" alt="">
                             </a> 
                         </div>
                         <div class="article-wrapper">

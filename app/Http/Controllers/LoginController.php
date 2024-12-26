@@ -14,13 +14,12 @@ class LoginController extends Controller
     }
 
     public function login(LoginRequest $request){
-        // $credentials = [
-        //     'email' => $request->email,
-        //     'password' => $request->password,
-        // ];
+        $credentials = [
+            'email' => $request->email,
+            'password' => $request->password,
+        ];
 
-        if(Auth::check() && Auth::user()->level == 1 ){
-            
+        if(Auth::check($credentials)){
             return redirect()->route('admin.dash.index');
         }else{
             return redirect()->route('client.index');
