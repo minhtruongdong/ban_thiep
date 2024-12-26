@@ -43,7 +43,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 text-center">
-                    <h2 class="h2">our services<span></span></h2>
+                    <h2 class="h2">our categories<span></span></h2>
                 </div>
                 <div class="col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
                     <div class="text-center grey-dark">
@@ -55,53 +55,35 @@
             <div class="empty-space h35-xs h50-md"></div>
             <div class="services small text-center">
                 <div class="row">
-                    @foreach($categories->take(4) as $category)
-                        @php
-                            $image = file_exists(public_path('images/category-images/' . $category->image)) 
-                                ? asset('images/category-images/' . $category->image) 
-                                : asset('images/image-not-found.png');
-                        @endphp
-                        <div class="col-sm-6 col-md-3">
-                            <div class="icon-wrapper">
-                                <a href="#" class="icon">
-                                    <img src="{{ $image }}" alt="{{ $category->name }}" class="category-image">
-                                </a>
-                            </div>
-                            <div class="article-wrapper" style="margin-top: 10px">
-                                <article>
-                                    <a href="{{ route('client.product.category', ['id' => $category->id]) }}">
-                                        <h6 class="h8 hover-3">{{ $category->name }}</h6>
-                                    </a>
-                                    <p>Quisque with placerat Porttitor nisi felis Congue in & Tempus</p>
-                                </article>
-                            </div>
+                    @foreach($categories->take(4) as $index => $category)
+                    <div class="col-sm-6 col-md-3">
+                        <div class="icon-wrapper">
+                           <a href="#" class="icon">
+                                <img src="{{asset('administrator/img/service-img-'. ($index+=1) .'.png')}}" alt="">
+                            </a> 
                         </div>
+                        <div class="article-wrapper">
+                            <article>
+                                <a href="{{route('client.product.category',['id'=> $category->id])}}"><h6 class="h8 hover-3">{{$category -> name }}</h6></a>
+                                {{-- <p>Quisque with placerat Porttitor nisi felis Congue in & Tempus</p> --}}
+                            </article>
+                        </div>
+                    </div>
                     @endforeach
-                    <style>
-                        .icon-wrapper {
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            width: 100%;
-                            height: 130px; 
-                            margin-bottom: 10px;
-                        }
-                        .category-image {
-                            width: 70px; 
-                            height: 70px;
-                            border-radius: 50%; 
-                            object-fit: cover; 
-                        }
-                        .services .icon img {
-                            position: absolute;
-                            left: 50%;
-                            top: 50%;
-                            margin-left: -34px;
-                            margin-top: -35px;
-                        }
-                    </style>
 
                 </div>
+                <style>
+                    .services .icon img {
+                        position: absolute;
+                        left: 50%;
+                        top: 50%;
+                        margin-left: -50px;
+                        margin-top: -50px;
+                        border-radius: 50%;
+                        width: 100px;
+                        height: 100px;
+                    }
+                </style>
             </div>
             <div class="empty-space h35-xs h100-md"></div>
             <div class="empty-space h10-xs"></div>
@@ -262,96 +244,66 @@
             </div>
             <div class="empty-space h45-xs h10-md"></div>
             <div class="row work-wrapper">
-                @for($i =1 ; $i <=6 ; $i++)
-                <div class="col-md-6">
-                    <div class="work-item">
-                        <span><i>for:</i> <a href="#">Fashion Life company</a></span>
-                        <span class="h5"><a class="hover-2" href="detail.html">Keep the best moment</a></span>
-                        <span><i>branding &#47; photoshooting</i></span>
-                        <div class="bg"></div>
-                        <a href="{{asset('administrator/img/img-1.jpg')}}" class="work-img-wrapper lightbox">
-                            <div class="work-img" style="background-image: url({{asset('administrator/img/img-'.$i.'.jpg')}});"></div>
-                        </a>
-                    </div>
-                </div>
-                @endfor
-
+            <div class="row">
+                @foreach ($products_lastest as $product)
+                    @php
+                        $image = file_exists(public_path('images/'.$product->image)) 
+                            ? asset('images/'.$product->image) 
+                            : asset('images/404.jpeg');
+                    @endphp
+                    
+                    @if ($category->id % 2 == 0)
+                        <div class="col-md-6" >
+                            <div class="work-item style-2" style="margin-top: 200px;">
+                                <span>
+                                    <i>for:</i> 
+                                    <a href="{{route('client.product.category',['id'=>$product->id])}}">{{$product->name}}</a>
+                                </span>
+                                <span class="h5">
+                                    <a class="hover-2" href="#" data-toggle="modal" data-target="#productModal">
+                                        {{$product->name}}
+                                    </a>
+                                </span>
+                                <span>
+                                    <i>branding / photoshooting</i>
+                                </span>
+                                <div class="bg"></div>
+                                <a href="{{route('client.product.category',['id'=>$product->id])}}" class="work-img-wrapper lightbox" data-category-id="{{$product->id}}" data-toggle="modal" data-target="#productModal">
+                                    <div class="work-img" style="background-image: url('{{$image}}'); height:300px"></div>
+                                </a>
+                            </div>
+                        </div>
+                    @else
+                        <div class="col-md-6">
+                            <div class="work-item">
+                                <span>
+                                    <i>for:</i>
+                                    <a href="#">{{$product->name}}</a></span>
+                                <span class="h5">
+                                    <a class="hover-2" href="#" data-category-id="{{$category->id}}" data-toggle="modal" data-target="#productModal">
+                                        {{$product->name}}
+                                    </a>
+                                </span>
+                                <span>
+                                    <i>branding &#47; photoshooting</i>
+                                </span>
+                                <div class="bg"></div>
+                                <a href="{{route('client.product.category',['id'=> $product->id])}}" class="work-img-wrapper lightbox" data-category-id="{{$category->id}}" data-toggle="modal" data-target="#productModal">
+                                    <!-- Gắn ảnh làm background -->
+                                    <div class="work-img" style="background-image: url('{{ $image }}')"></div>
+                                </a>
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
             </div>
+        </div>
         </div>
         <!-- our works -->
 
         <div class="empty-space h30-xs h40-md"></div>
         <div class="empty-space h30-xs"></div>
-{{-- 
-        <div class="row">
-            @foreach ($categories as $category)
-                @php
-                    $image = file_exists(public_path('images/category-images/' . $category->image)) 
-                        ? asset('images/category-images/' . $category->image) 
-                        : asset('images/404.jpeg');
-                @endphp
-                @if ($category->id % 2 == 0)
-                    <div class="col-md-6" >
-                        <div class="work-item style-2" style="margin-top: 200px;">
-                            <span>
-                                <i>for:</i> 
-                                <a href="{{route('client.product.category',['id'=>$category->id])}}">{{$category->name}}</a>
-                            </span>
-                            <span class="h5">
-                                <a class="hover-2" href="#" data-toggle="modal" data-target="#productModal">
-                                    {{$category->name}}
-                                </a>
-                            </span>
-                            <span>
-                                <i>branding / photoshooting</i>
-                            </span>
-                            <div class="bg"></div>
-                            <a href="{{route('client.product.category',['id'=>$category->id])}}" class="work-img-wrapper lightbox" data-category-id="{{$category->id}}" data-toggle="modal" data-target="#productModal">
-                                <div class="work-img" style="background-image: url('{{$image}}');"></div>
-                            </a>
-                        </div>
-                    </div>
-                @else
-                    <div class="col-md-6">
-                        <div class="work-item">
-                            <span>
-                                <i>for:</i>
-                                <a href="#">{{$category->name}}</a></span>
-                            <span class="h5">
-                                <a class="hover-2" href="#" data-category-id="{{$category->id}}" data-toggle="modal" data-target="#productModal">
-                                    {{$category->name}}
-                                </a>
-                            </span>
-                            <span>
-                                <i>branding &#47; photoshooting</i>
-                            </span>
-                            <div class="bg"></div>
-                            <a href="#" class="work-img-wrapper lightbox" data-category-id="{{$category->id}}" data-toggle="modal" data-target="#productModal">
-                                <!-- Gắn ảnh làm background -->
-                                <div class="work-img" style="background-image: url('{{ $image }}');"></div>
-                            </a>
-</div>
-                    </div>
-                @endif
-                
-            @endforeach
-            <!-- Modal -->
-            {{-- <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="productModalLabel">Danh sách sản phẩm</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body" id="product-list-modal">
-                            <!-- Sản phẩm sẽ được load ở đây -->
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
-        </div> --}}
+
 
 
 
@@ -408,7 +360,7 @@
                         </article>
                     </div>
                     <div class="col-sm-4 col-sm-offset-2 col-md-3 col-md-offset-0 col-lg-2 col-lg-offset-0 text-center">
-                        <img src="{{asset('administrator/img/img-7.jpg')}}" alt="">
+                        {{-- <img src="{{asset('administrator/img/img-7.jpg')}}" alt=""> --}}
                     </div>
                 </div>
             </div>
@@ -680,6 +632,15 @@
                     </div>
                 </div>
             </div>
+            <style>
+                .swiper-style-4 .swiper-slide img {
+                    width: 70%;
+                    height: 200px;
+                    max-width: 308px;
+                    display: block;
+                    margin: 0 auto;
+                }
+            </style>
 {{-- Lastest Feature Product --}}
             <div class="empty-space h30-xs h100-md"></div>
             <div class="row">
@@ -690,7 +651,7 @@
 
             <div class="emty-space h45-xs h65-md">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12" >
                         <div class="swiper-wrapper">
                             <div class="swiper-slide">
                                 <a href="#" class="img-hover-2 img-fluid"><img src="{{asset('images/'.$products_feature_lastest->image)}}" alt=""></a>
@@ -711,7 +672,13 @@
                     </div>
                 </div>
             </div>
-            
+            <style>
+                .img-hover-2 img {
+                    display: block;
+                    width: 30%;
+                    margin: 5px auto;
+                }
+            </style>
         </div>
         <!-- sale -->
         <div class="empty-space h25-xs h100-md"></div>

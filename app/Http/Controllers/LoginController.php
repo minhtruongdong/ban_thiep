@@ -19,9 +19,11 @@ class LoginController extends Controller
             'password' => $request->password,
         ];
 
-        if(Auth::attempt($credentials)){
+        if(Auth::check() && Auth::user()->level == 1 ){
             
             return redirect()->route('admin.dash.index');
+        }else{
+            return redirect()->route('client.index');
         }
 
         return redirect()->back();
@@ -31,6 +33,6 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerate();
-        return redirect()->route('auth.login');
+        return redirect()->route('client.index');
     }
 }

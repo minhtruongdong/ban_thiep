@@ -5,7 +5,7 @@
 /* Version: 1.0 Initial Release*/
 /* Build Date: 06-02-2016*/
 /* Author: LionStyle*/
-/* Website: http://moonart.net.ua/modesto/ 
+/* Website: http://moonart.net.ua/modesto/
 /* Copyright: (C) 2016 */
 /*-------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -75,7 +75,7 @@ $(function() {
         }, 1000);
 
         izotopInit();
-        
+
         $('.fixed-menu .nav-fix-a').each(function(){
              var index_start = $('.fixed-menu .nav-fix-a').index(this);
              if($(this).attr('data-link') ===  window.location.hash){
@@ -86,7 +86,7 @@ $(function() {
         if ($('.baner-bg').length){
             $('header').addClass('bg-header');
         }
-        
+
         $('body').addClass('loaded');
         setTimeout(function(){
             setTimeout(function(){
@@ -134,7 +134,7 @@ $(function() {
 
     function scrollCall(){
         winScr = $(window).scrollTop();
-        if (winScr>30){  
+        if (winScr>30){
             $('header').addClass('scrolled');
             $('.popup-container.right').addClass('scrolled');
         }
@@ -150,8 +150,8 @@ $(function() {
 
     function initSwiper(){
         var initIterator = 0;
-        $('.swiper-container').each(function(){                               
-            var $t = $(this);                                 
+        $('.swiper-container').each(function(){
+            var $t = $(this);
 
             var index = 'swiper-unique-id-'+initIterator;
 
@@ -243,7 +243,7 @@ $(function() {
         if($('.pagination-slider-wrapper[data-pagination-rel="'+container.data('pagination-rel')+'"]').length){
             var foo = $('.pagination-slider-wrapper[data-pagination-rel="'+container.data('pagination-rel')+'"]');
             foo.css({'top':(-1)*parseInt(foo.find('.active').attr('data-slide-to'), 10)*foo.parent().height()});
-        }        
+        }
     }
 
     var slide_index = 1;
@@ -335,12 +335,12 @@ $(function() {
         }
         return false;
     });
-    
+
 //portfolio drop-menu: active nav-a
     $('.nav-a').on('click', function(){
         if($('.drop-menu').hasClass('active')){ //for responsive only
             $('.drop-menu').html($(this).html()+' <i id="portfolioCaret" class="fa fa-angle-up" aria-hidden="true"></i></a>');
-        } 
+        }
     });
 
 
@@ -353,7 +353,7 @@ $(function() {
     $('.btn-close').on('click', function(){
         $('.overlay-wrapper').removeClass('active');
     });
-    
+
     //overlay plus
    $('.dropdown-plus span').on('click', function(){
         $(this).toggleClass('clicked').parent().find('ul').slideToggle(300);
@@ -362,14 +362,14 @@ $(function() {
    /*----*/
     /*SHOP*/
     /*----*/
-    
+
     /*SumoSelect*/
-    if($('.select-box').length > 0){   
+    if($('.select-box').length > 0){
         $('.select-box').SumoSelect();
     };
 
     /*slider-range*/
-    if($('#slider-range').length > 0){  
+    if($('#slider-range').length > 0){
         $( function() {
             $( "#slider-range" ).slider({
               range: true,
@@ -443,7 +443,7 @@ $(function() {
     $('.shop .detail-item .description .color span').on('click', function(){
         $('.shop .detail-item .description .color span').removeClass('active');
         $(this).addClass('active');
-    });    
+    });
 
     //tabs
     var tabsFinish = 0;
@@ -454,7 +454,7 @@ $(function() {
             tabsMenu = tabsWrapper.find('.tab-menu'),
             tabsItem = tabsWrapper.find('.tab-entry'),
             index = tabsMenu.index(this);
-        
+
         tabsItem.filter(':visible').fadeOut(function(){
             tabsItem.eq(index).fadeIn(function(){
                 tabsFinish = 0;
@@ -487,9 +487,9 @@ $(function() {
         var img_src = $(this).attr('data-src');
         $('.img-main').attr('src', img_src);
     });
-    
+
     $('.scroll-down').on('click', function(){
-      var scrollOffset = $('.baner-bg').next().offset().top - $('header').height();    
+      var scrollOffset = $('.baner-bg').next().offset().top - $('header').height();
        $('body, html').animate({
            scrollTop: scrollOffset
        },800);
@@ -507,11 +507,11 @@ $(function() {
             $(this).closest('.quantity').find('input').attr('value', 1);
         }
     });
-    
+
     /*==============================*/
     /* 10 - Isotope */
     /*==============================*/
-    
+
     function izotopInit() {
 	  if ($('.izotope-container').length) {
 	    var $container = $('.izotope-container');
@@ -534,7 +534,7 @@ $(function() {
             });
 	  }
 	}
-    
+
     $('.sorting-menu .button-drop').on('click', function(){
         var list = $('.sorting-menu ul');
             if($(this).hasClass('active')){
@@ -546,19 +546,87 @@ $(function() {
         }
         return false;
     });
- 
-    
-   
-    
-     if ($(window).width()<992){
+
+    /*----*//*SHOP*//*----*/
+
+    $(document).ready(function () {
+        // Khi nhấn vào nút "Custom Product"
+        $('#customProductBtn').on('click', function (event) {
+            event.preventDefault();
+            $('.product-detail-choose').hide(); // Ẩn chi tiết sản phẩm
+            $('#customProductForm').show(); // Hiển thị form
+        });
+
+        // Khi nhấn nút "Hủy"
+        $('#cancelCustomForm').on('click', function () {
+            $('#customProductForm').hide(); // Ẩn form
+            $('.product-detail-choose').show(); // Hiển thị lại chi tiết sản phẩm
+        });
+
+        // Hiển thị nội dung "Tên người nhận" ngay khi người dùng nhập
+        $('#recipientName').on('input', function () {
+            const recipientName = $(this).val().trim();
+            $('#customTextDisplay').find('.recipient-name').text(recipientName);
+        });
+
+        // Hiển thị nội dung "Lời chúc" ngay khi người dùng nhập
+        $('#customMessage').on('input', function () {
+            const customMessage = $(this).val().trim();
+            $('#customTextDisplay').find('.custom-message').text(customMessage);
+        });
+        
+
+
+
+    // Khi nhấn nút "Xác nhận"
+    $('#generateImage').on('click', function () {
+        if (typeof html2canvas !== 'undefined') {
+            const $button = $(this);
+            const productId = $button.data('product-id');
+            const saveUrl = $button.data('save-url').replace(':id', productId);
+            
+            html2canvas(document.querySelector('#productDisplay')).then(function (canvas) {
+                const imageData = canvas.toDataURL('image/png');
+                
+                $.ajax({
+                    url: saveUrl,
+                    method: 'POST',
+                    data: {
+                        _token: $button.data('csrf'),
+                        image: imageData,
+                        recipient_name: $('#recipientName').val(),
+                        custom_message: $('#customMessage').val(),
+                    },
+                    success: function (response) {
+                        alert('Hình ảnh đã được lưu thành công!');
+                    },
+                    error: function (error) {
+                        console.error(error);
+                        alert('Có lỗi xảy ra khi lưu hình ảnh!');
+                    }
+                });
+            });
+        } else {
+            alert('Thư viện html2canvas chưa được tải. Vui lòng kiểm tra!');
+        }
+    });
+    });
+
+
+
+
+
+    if ($(window).width()<992){
           $('.txt-replace').on('click', function(){
-                $(this).parent().find('.tabs-mobile-style').slideToggle(325);  
+                $(this).parent().find('.tabs-mobile-style').slideToggle(325);
            });
           $('.tabs-mobile-style .tab-menu').on('click', function(){
-            $('.txt-replace span').text($(this).text()); 
-            $(this).parent().slideUp(325);  
-         });    
+            $('.txt-replace span').text($(this).text());
+            $(this).parent().slideUp(325);
+         });
      }
-     
+
+
+
 
 });

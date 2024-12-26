@@ -5,15 +5,12 @@
     <div id="content">
 
         <div class="baner-bg">
-            <div id="map-canvas" class="map-item" data-lat="40.712332" data-lng="-74.009596" data-zoom="10" data-style="style-1" data-marker="img/marker.png"></div> 
-            <div class="addresses-block">
-                <a data-lat="40.712332" data-lng="-74.009596" data-string="1. Here is some address or email or phone or something else..."></a>
-            </div>  
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4720.222406592325!2d106.71161431132008!3d10.806691158588904!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317529ed00409f09%3A0x11f7708a5c77d777!2zQXB0ZWNoIENvbXB1dGVyIEVkdWNhdGlvbiAtIEjhu4cgVGjhu5FuZyDEkMOgbyB04bqhbyBM4bqtcCBUcsOsbmggVmnDqm4gUXXhu5FjIHThur8gQXB0ZWNo!5e1!3m2!1svi!2s!4v1734790638832!5m2!1svi!2s" width="100%" height="100%" style="border:1px solid;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
 
-        <section class="section">  
+        <section class="section">
             <div class="empty-space h30-xs h100-md"></div>
-            <div class="empty-space h30-xs"></div> 
+            <div class="empty-space h30-xs"></div>
             <div class="container">
                 <div class="row">
                     <div class="col-xs-12 text-center">
@@ -59,7 +56,7 @@
                            </div>
                        </div>
                    </div>
-                   
+
                    <div class="col-md-3 col-sm-6 col-xs-12">
                        <div class="contact-item">
                            <h4 class="h5">Follow us</h4>
@@ -70,7 +67,7 @@
                                 <a class="item" href="https://www.pinterest.com/" target="_blank"><i class="fa fa-pinterest-p"></i></a>
                                 <a class="item" href="https://twitter.com/" target="_blank"><i class="fa fa-twitter"></i></a>
                                 <a class="item" href="https://plus.google.com/" target="_blank"><i class="fa fa-google-plus"></i></a>
-                            </div> 
+                            </div>
                        </div>
                    </div>
                 </div>
@@ -101,13 +98,13 @@
                                 <div class="center-wrap"><div class="btn-2"><input type="submit" value=""><span>Send message</span></div></div>
                             </div>
                         </form>
-                      </div> 
-                   </div> 
+                      </div>
+                   </div>
                 </div>
-                
+
             </div>
             <div class="empty-space h30-xs h70-md"></div>
-            <div class="empty-space h30-xs"></div> 
+            <div class="empty-space h30-xs"></div>
         </section>
 
     </div>

@@ -2,7 +2,7 @@
     <div class="wide-container-fluid">
         <div class="row">
             <div class="col-xs-2">
-                <a class="logo" href="{{route('client.index')}}"><img src="{{asset('administrator/img/logo.png')}}" alt="" /></a>  
+                <a class="logo" href="{{route('client.index')}}"><img src="{{asset('administrator/img/logo.png')}}" alt="" /></a>
             </div>
             <div class="col-xs-10 text-right">
 
@@ -11,7 +11,7 @@
                     <li><a href="{{route('client.about')}}"><span>About us</span></a></li>
 
                     @php
-                        $categories = \App\Models\Category::where('parent_id',8)->get();
+                        $categories = \App\Models\Category::where('parent_id',0)->get();
                     @endphp
 
                     <li>
@@ -25,7 +25,10 @@
                     </li>
 
                     <li><a href="checkout.html"><span>Checkout</span></a></li>
-                    <li><a href="contact.html"><span>Contact us</span></a></li>
+                    <li><a href="{{route('client.contact')}}"><span>Contact us</span></a></li>
+                    @if (Auth::check() && Auth::user()->level == 1 )
+                    <li><a href="{{route('admin.dash.index')}}"><span>Manager Page</span></a></li>
+                    @endif
                 </ul>
 
                 <!-- basket -->
@@ -33,6 +36,7 @@
                     $cartCollection = Cart::getContent();
 
                 @endphp
+                
                 <div class="basket open-popup" data-rel="1">
                     <div class="img-wrapper">
                         <span>{{$cartCollection->count()}}</span>
@@ -42,8 +46,18 @@
                 </div>
                 <!-- login -->
                 <div class="login-wrapper">
-                    <div class="login open-popup" data-rel="2"><span>Log in &#47; Sing up</span></div>
-                </div>     
+                        <div class="login" data-rel="2">
+                            @if (Auth::check())
+                            <a href="{{route('auth.logout')}}">
+                                <span>Log Out </span> 
+                            </a>   
+                            @else
+                            <a href="{{route('auth.login')}}">
+                                <span>Log In</span>
+                            </a>
+                            @endif
+                        </div>
+                </div>
 
                 <div class="hamburger-icon">
                     <span></span>

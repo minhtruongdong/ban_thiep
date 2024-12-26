@@ -206,8 +206,12 @@ th {
         </tbody>
     </table>
     <div id="total">Tổng cộng: {{number_format(Cart::getSubTotal(),0,"",".")}}VND</div>
-    <button id="addProduct">Thêm Sản Phẩm Mới</button>
-    <a href="{{route('client.checkout')}}" class="checkout_payment">Thanh Toan</a>
+    <div class="empty-space h25-xs h30-md"></div>
+    <button> <a href="{{route('client.checkout')}}" class="checkout_payment">Thanh Toan</a> </button>
+    <form action="{{route('client.checkoutvnpay_payment')}}" method="POST">
+        @csrf
+   <button class="checkout_payment" name="redirect"> Thanh Toan VNPAY </button>
+    </form>
 </div>
 
 
