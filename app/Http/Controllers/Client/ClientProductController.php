@@ -98,6 +98,7 @@ class ClientProductController extends Controller
             // $cart->payment_id = 1; // Ví dụ, thay đổi theo logic của bạn
             // $cart->product_id = $id; // Lưu ID sản phẩm
             // $cart->save(); // Lưu bản ghi vào cơ sở dữ liệu
+            
 
             return response()->json([
                 'success' => true,
