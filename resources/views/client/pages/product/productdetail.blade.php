@@ -118,7 +118,7 @@
                                             @csrf
                                             <!-- Hiển thị sản phẩm -->
                                             <div id="productDisplay" style="position: relative; margin-top: 20px;">
-                                                <img id="popupImage" 
+                                                <img id="popupImage"
                                                     alt="Product Image" style="width: 100%; height: auto;">
                                                 <div id="customTextDisplay"
                                                     style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; font-weight: bold; color: #fff; text-align: center; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);">
@@ -138,18 +138,17 @@
                                             </div>
                                             <div class="form-group text-right">
                                                 <button type="button" id="generateImage" class="btn btn-success"
-                                                    data-product-id="{{ $products->id }}"
-                                                    data-save-url="{{ route('client.product.saveCustomImage', ['id' => $products->id]) }}"
-                                                    data-csrf="{{ csrf_token() }}">
+                                                        data-product-id="{{ $products->id }}"
+                                                        data-save-url="{{ route('client.product.saveCustomImage', ['id' => $products->id]) }}"
+                                                        data-csrf="{{ csrf_token() }}">
                                                     Xác nhận
                                                 </button>
                                                 <button type="button" id="cancelCustomForm"
                                                     class="btn btn-secondary">Hủy</button>
                                                 </div>
                                         </form>
-                                        
+
                                     </div>
-                                    <script></script>
 
                             <form action="{{ route('client.savePrice') }}" method="POST">
                                 @csrf
