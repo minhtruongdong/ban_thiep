@@ -36,6 +36,7 @@
                     $cartCollection = Cart::getContent();
 
                 @endphp
+                
                 <div class="basket open-popup" data-rel="1">
                     <div class="img-wrapper">
                         <span>{{$cartCollection->count()}}</span>

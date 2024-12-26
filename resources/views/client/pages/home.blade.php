@@ -56,15 +56,11 @@
             <div class="services small text-center">
                 <div class="row">
                     @foreach($categories->take(4) as $index => $category)
-                    @php
-                        $image = file_exists(public_path($category->image)) 
-                            ? asset($category->image) 
-                            : asset('images/404.jpeg');
-                    @endphp
                     <div class="col-sm-6 col-md-3">
                         <div class="icon-wrapper">
-                           <a href="{{route('client.product.category',['id'=> $category->id])}}" class="icon">
-                                <img src="{{$image}}" alt="">
+                           <a href="#" class="icon">
+                                {{-- <img src="{{asset('administrator/img/service-img-'. ($index+=1) .'.png')}}" alt=""> --}}
+                                <img src="{{asset($category->image)}}" alt="">
                             </a> 
                         </div>
                         <div class="article-wrapper">
@@ -75,6 +71,7 @@
                         </div>
                     </div>
                     @endforeach
+
                 </div>
                 <style>
                     .services .icon img {

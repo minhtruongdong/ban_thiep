@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
         [
             [
             'id' => 1,
-            'email' => 'supperadmin@gmail.com',
+            'email' => 'superadmin@gmail.com',
             'email_verified_at' => now(),
             'password' => bcrypt('123456789'),
             'level' => 1,

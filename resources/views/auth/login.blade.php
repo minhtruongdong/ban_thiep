@@ -199,6 +199,7 @@
                         <form action="{{route('auth.login')}}" method="POST" class="mt-4">
                             <!-- Form -->
                             @csrf
+
                             <div class="form-group mb-4">
                                 <label for="email">Your Email</label>
                                 <div class="input-group">
@@ -252,6 +253,7 @@
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-gray-800">Sign in</button>
                             </div>
+                            
                         </form>
 
                         <div class="mt-3 mb-4 text-center">

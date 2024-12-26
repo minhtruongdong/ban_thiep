@@ -6,6 +6,8 @@ use App\Models\User;
 use Database\Seeders\Admin\CategorySeeder;
 use Database\Seeders\Admin\ProductSeeder;
 use Database\Seeders\Admin\UserSeeder;
+use Database\Seeders\Admin\PaymentSeeder;
+use Database\Seeders\Admin\CartSeeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -27,6 +29,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CategorySeeder::class,
             ProductSeeder::class,
+            PaymentSeeder::class,
+            CartSeeder::class,
         ]);
     }
 }

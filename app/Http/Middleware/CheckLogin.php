@@ -20,7 +20,10 @@ class CheckLogin
             if(Auth::user()->level == 2){
                 return redirect()->route('client.index');
             }
-            return $next($request);
+            else if(Auth::user()->level == 1){
+                return redirect()->route('admin.dash.index');
+            }
+            return $next($request); 
         }
         return redirect()->back();
     }

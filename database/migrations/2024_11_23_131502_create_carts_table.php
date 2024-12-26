@@ -16,8 +16,18 @@ return new class extends Migration
             $table->integer('cart_total')->default(100000);
             $table->dateTime('cart_date');
             $table->tinyInteger('status');
+
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');;
+
+            $table->unsignedBigInteger('payment_id')->unsigned(); // Đảm bảo trường này là unsigned
+            $table->foreign('payment_id')->references('id')->on('payments')->onDelete('cascade');
+
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+
+            $table->string('image_custom');
+            
             $table->timestamps();
         });
     }

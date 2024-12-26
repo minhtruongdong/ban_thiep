@@ -26,7 +26,7 @@ Route::prefix('auth')->name('auth.')->group(function(){
     Route::get('logout',[LoginController::class,'logout'])->name('logout');
 });
 
-Route::middleware(CheckLogin::class)->group(function(){
+// Route::middleware(CheckLogin::class)->group(function(){
     Route::prefix('admin') -> name('admin.' ) -> group(function(){
         Route::prefix('dash') -> name('dash.') ->controller(DashBoardController::class)->group(function(){
             Route::get('index','index')->name('index');
@@ -76,7 +76,7 @@ Route::middleware(CheckLogin::class)->group(function(){
             Route::get('destroy/{id}', 'destroy')->name('destroy');
         });
     });
-});
+// });
 
 
 
@@ -99,10 +99,12 @@ Route::prefix('client')->name('client.')->group(function(){
         Route::get('/the-loai/{id}','category')->name('category');
         Route::get('/chi-tiet-san-pham/{id}','productdetail')->name('productdetail');
         Route::post('/save-custom-image/{id}', 'saveCustomImage')->name('saveCustomImage');
+        Route::post('/save_image_localhost/{id}','uploadImage')->name('uploadImage');
     });
 
+// vnpay
 
-
+    Route::post('/thanh-toan-vnpay',[CartController::class,'checkoutvnpay_payment'])->name('checkoutvnpay_payment');
 
 
 });

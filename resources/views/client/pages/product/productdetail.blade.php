@@ -138,9 +138,10 @@
                                             </div>
                                             <div class="form-group text-right">
                                                 <button type="button" id="generateImage" class="btn btn-success"
-                                                        data-product-id="{{ $products->id }}"
-                                                        data-save-url="{{ route('client.product.saveCustomImage', ['id' => $products->id]) }}"
-                                                        data-csrf="{{ csrf_token() }}">
+                                                    data-product-id="{{ $products->id }}"
+                                                    {{-- data-cart-id = {{$cart_id->id}} --}}
+                                                    data-save-url="{{ route('client.product.uploadImage', ['id' => $products->id])}}"
+                                                    data-csrf="{{ csrf_token() }}">
                                                     Xác nhận
                                                 </button>
                                                 <button type="button" id="cancelCustomForm"
@@ -149,6 +150,9 @@
                                         </form>
 
                                     </div>
+                                    <script>
+                                        // Cần viết ở đoạn này để lưu hình
+                                    </script>
 
                             <form action="{{ route('client.savePrice') }}" method="POST">
                                 @csrf
@@ -176,7 +180,7 @@
                                     <i class="fa fa-caret-right" aria-hidden="true"></i>
                                 </div>
                             </div>
-                            <div class="btn-wrap"><a href="#" class="btn-2"><span>add to cart</span></a></div>
+                            <div class="btn-wrap"><a href="{{route('client.addToCart',['id'=>$products->id,'quantity'=>1])}}" class="btn-2"><span>add to cart</span></a></div>
                             <div class="btn-wrap"><a href="#" class="btn-1 border"><span>add to
                                         favourites</span></a></div>
                             <div class="follow-category">
@@ -431,7 +435,7 @@
 </div>
 <!-- content -->
 
-<script>
+{{-- <script>
     // Hiển thị hoặc Ẩn Form tùy chỉnh
 document.getElementById('customProductBtn').addEventListener('click', function () {
     const form = document.getElementById('customProductForm');
