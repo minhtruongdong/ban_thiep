@@ -111,12 +111,13 @@ class ClientProductController extends Controller
     public function uploadImage(Request $request, $id)
 {
     $product = Product::findOrFail($id);
-
+    
     // Validate input
     $request->validate([
         'image' => 'required',
         'recipient_name' => 'required|string',
         'custom_message' => 'required|string',
+        'recipientPrice' => 'required|integer',
     ]);
 
     $imageData = $request->input('image');
@@ -147,18 +148,27 @@ class ClientProductController extends Controller
 
     // Đường dẫn để truy cập file
     $filePath = asset('custom_images/' . $fileName);
-
+    $money = $request->input('recipientPrice');
+    
     // Lưu vào bảng carts
-    DB::table('carts')->insert([
+    $cartId = DB::table('carts')->insertGetId([
         'image_custom' => $fileName, // Lưu tên file hình ảnh
-        'cart_total' => 100000, // Ví dụ
+        'cart_total' => $money, // Ví dụ
         'cart_date' => now(), // Ví dụ
         'status' => 1, // Ví dụ
         'user_id' => Auth::user()->id, // Lấy ID người dùng hiện tại
         'payment_id' => 1, // Ví dụ
         'product_id' => $id, // Lấy ID sản phẩm
     ]);
-
+    
+    DB::table('cart_detail')->insert([
+        'cart_id' => $cartId, // ID của cart vừa tạo
+        // 'product_id' => $id, // ID sản phẩm
+        'money' => $money, // Giá sản phẩm
+        'recipient_email' => 'minhtruongdong@gmail.com',
+        'quantity' => 1, // Số lượng, có thể thay đổi theo yêu cầu
+    ]);
+    
     return response()->json(['success' => 'Hình ảnh đã được lưu thành công!']);
 }
 }

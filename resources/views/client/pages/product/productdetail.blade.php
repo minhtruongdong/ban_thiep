@@ -136,10 +136,21 @@
                                                 <textarea id="customMessage" name="custom_message" class="form-control"
                                                     rows="4" placeholder="Nhập lời chúc"></textarea>
                                             </div>
+                                            <div class="form-group">
+                                                <label for="recipientPrice"><span>Trị Giá :</span></label>
+                                                <select class="form-control" name="recipientPrice" id="recipientPrice">
+                                                    <option value="100000">100.000</option>
+                                                    <option value="200000">200.000</option>
+                                                    <option value="300000">300.000</option>
+                                                    <option value="400000">400.000</option>
+                                                    <option value="500000">500.000</option>
+                                                </select>
+                                            </div>
                                             <div class="form-group text-right">
                                                 <button type="button" id="generateImage" class="btn btn-success"
                                                     data-product-id="{{ $products->id }}"
                                                     {{-- data-cart-id = {{$cart_id->id}} --}}
+                                                    
                                                     data-save-url="{{ route('client.product.uploadImage', ['id' => $products->id])}}"
                                                     data-csrf="{{ csrf_token() }}">
                                                     Xác nhận
@@ -150,11 +161,11 @@
                                         </form>
                                         
                                     </div>
-                                    <script>
+                                    {{-- <script>
                                         // Cần viết ở đoạn này để lưu hình 
-                                    </script>
+                                    </script> --}}
 
-                            <form action="{{ route('client.savePrice') }}" method="POST">
+                            {{-- <form action="{{ route('client.savePrice') }}" method="POST">
                                 @csrf
                                 <!-- CSRF Token for Laravel -->
                                 <div class="form-group">
@@ -167,20 +178,28 @@
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Submit</button>
-                            </form>
+                            </form> --}}
 
 
                             <p>{{$products->description}}</p>
                             </article>
+                            
                             <div class="quantity-wrapper">
                                 <span>quantity:</span>
                                 <div class="quantity">
-                                    <input type="number" value="1">
+                                    <input type="number" id="product-quantity" value="1" min="1">
                                     <i class="fa fa-caret-left" aria-hidden="true"></i>
                                     <i class="fa fa-caret-right" aria-hidden="true"></i>
                                 </div>
                             </div>
-                            <div class="btn-wrap"><a href="{{route('client.addToCart',['id'=>$products->id,'quantity'=>1])}}" class="btn-2"><span>add to cart</span></a></div>
+
+                            
+                            <div class="btn-wrap">
+                                <a href="#" class="btn-2" id="add-to-cart-btn"><span>add to cart</span></a>
+                            </div>
+
+
+
                             <div class="btn-wrap"><a href="#" class="btn-1 border"><span>add to
                                         favourites</span></a></div>
                             <div class="follow-category">
@@ -434,90 +453,38 @@
 
 </div>
 <!-- content -->
-
-{{-- <script>
-    // Hiển thị hoặc Ẩn Form tùy chỉnh
-document.getElementById('customProductBtn').addEventListener('click', function () {
-    const form = document.getElementById('customProductForm');
-    form.style.display = form.style.display === 'none' ? 'block' : 'none';
-});
-
-// Ẩn Form khi nhấn nút Hủy
-document.getElementById('cancelCustomForm').addEventListener('click', function () {
-    const form = document.getElementById('customProductForm');
-    form.style.display = 'none';
-});
-
-// Cập nhật nội dung tùy chỉnh trực tiếp khi nhập
-document.getElementById('recipientName').addEventListener('input', function () {
-    document.querySelector('.recipient-name').textContent = this.value;
-});
-
-document.getElementById('customMessage').addEventListener('input', function () {
-    document.querySelector('.custom-message').textContent = this.value;
-});
-document.getElementById('generateImage').addEventListener('click', function () {
-    const productId = this.dataset.productId; // ID sản phẩm
-    const saveUrl = this.dataset.saveUrl;    // URL để lưu hình ảnh
-    const csrfToken = this.dataset.csrf;    // CSRF Token
-
-    // Lấy nội dung người dùng nhập
-    const recipientName = document.getElementById('recipientName').value;
-    const customMessage = document.getElementById('customMessage').value;
-
-    // Lấy DOM phần hiển thị ảnh và nội dung
-    const productDisplay = document.getElementById('productDisplay');
-
-    // Tạo canvas để kết hợp hình ảnh và text
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-
-    // Thiết lập kích thước canvas giống với hình ảnh
-    const productImage = document.getElementById('productImage');
-    canvas.width = productImage.width;
-    canvas.height = productImage.height;
-
-    // Vẽ hình ảnh lên canvas
-    context.drawImage(productImage, 0, 0, canvas.width, canvas.height);
-
-    // Thêm text (Tên người nhận và lời chúc)
-    context.font = '24px Arial';
-    context.fillStyle = '#fff';
-    context.textAlign = 'center';
-    context.textBaseline = 'middle';
-    context.fillText(recipientName, canvas.width / 2, canvas.height / 2 - 20);
-    context.fillText(customMessage, canvas.width / 2, canvas.height / 2 + 20);
-
-    // Chuyển canvas sang định dạng ảnh (Base64)
-    const imageData = canvas.toDataURL('image/png');
-
-    // Gửi ảnh qua AJAX hoặc fetch
-    fetch(saveUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken
-        },
-        body: JSON.stringify({
-            image: imageData, // Ảnh đã mã hóa Base64
-            recipient_name: recipientName,
-            custom_message: customMessage,
-            product_id: productId
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Hình ảnh đã được lưu thành công!');
-        } else {
-            alert('Có lỗi xảy ra khi lưu hình ảnh. Vui lòng thử lại!');
-        }
-    })
-    .catch(error => {
-        console.error('Lỗi:', error);
-        alert('Có lỗi xảy ra khi kết nối đến server.');
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const quantityInput = document.getElementById('product-quantity');
+    const addToCartBtn = document.getElementById('add-to-cart-btn');
+    
+    // Xử lý nút tăng/giảm số lượng
+    document.querySelector('.fa-caret-right').addEventListener('click', function() {
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+        updateAddToCartUrl();
     });
+    
+    document.querySelector('.fa-caret-left').addEventListener('click', function() {
+        if (quantityInput.value > 1) {
+            quantityInput.value = parseInt(quantityInput.value) - 1;
+            updateAddToCartUrl();
+        }
+    });
+    
+    // Cập nhật href của nút "add to cart" khi số lượng thay đổi
+    function updateAddToCartUrl() {
+        const quantity = quantityInput.value;
+        // Sử dụng route với cả id và quantity
+        const url = "{{ route('client.addToCart', ['id' => $products->id, 'quantity' => ':quantity']) }}".replace(':quantity', quantity);
+        addToCartBtn.href = url;
+    }
+    
+    // Cập nhật URL khi số lượng thay đổi
+    quantityInput.addEventListener('change', updateAddToCartUrl);
+    quantityInput.addEventListener('input', updateAddToCartUrl);
+    
+    // Khởi tạo URL ban đầu
+    updateAddToCartUrl();
 });
-
-</script> --}}
+</script>
 @endsection

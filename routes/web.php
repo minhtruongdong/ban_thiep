@@ -89,10 +89,10 @@ Route::prefix('client')->name('client.')->group(function(){
 
     Route::get('/them-gio-hang/{id}/{quantity}',[CartController::class,'addToCart'])->name('addToCart');
 
-    Route::get('/gio-hang',[CartController::class,'cart'])->name('cart');
-    Route::get('xoa-gio-hang/{id}',[CartController::class,'cartDelete'])->name('cartDelete');
-    Route::post('cap-nhat-gio-hang/',[CartController::class,'cartUpdate'])->name('cartUpdate');
-    Route::get('/thanh-toan',[CartController::class,'checkout'])->name('checkout');
+    Route::get('/cart', [CartController::class, 'cartList'])->name('client.cart');
+    Route::get('/cart/delete/{id}', [CartController::class, 'cartDelete'])->name('client.cartDelete');
+    Route::post('/cart/update', [CartController::class, 'cartUpdate'])->name('client.cartUpdate');
+    Route::get('/cart/total', [CartController::class, 'getCartTotal'])->name('client.getCartTotal');
 
 
     Route::prefix('product') -> name('product.') ->controller(ClientProductController::class)->group(function(){
@@ -108,3 +108,5 @@ Route::prefix('client')->name('client.')->group(function(){
 
 
 });
+
+Route::get('/cart/total', [CartController::class, 'getCartTotal'])->name('client.getCartTotal');

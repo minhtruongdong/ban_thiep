@@ -12,6 +12,8 @@ class Carts extends Model
     protected $table = 'carts';
 
     protected $guarded = [];
+    protected $fillable = ['name', 'image_custom'];
+
     public function user():BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id'); // 'user_id' là khóa ngoại trong bảng carts
@@ -27,5 +29,10 @@ class Carts extends Model
     public function product():BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id'); // 'product_id' là khóa ngoại trong bảng carts
+    }
+
+    public function cartDetail()
+    {
+        return $this->hasOne(CartDetail::class, 'cart_id');
     }
 }
