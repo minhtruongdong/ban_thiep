@@ -27,7 +27,7 @@ class CartController extends Controller
     public function addToCart($id, $quantity)
     {
         $cart = Carts::with('cartDetail')->find($id);
-        
+        dd($cart);
         Cart::add([
             'id' => $cart->id,
             'name' => $cart->name,
