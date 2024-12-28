@@ -136,6 +136,16 @@
                                                 <textarea id="customMessage" name="custom_message" class="form-control"
                                                     rows="4" placeholder="Nhập lời chúc"></textarea>
                                             </div>
+                                            <div class="form-group">
+                                                <label for="recipientName"><span>Trị Giá :</span></label>
+                                                <select class="form-control"name="price" id="price">
+                                                    <option value="100000">100.000</option>
+                                                    <option value="200000">200.000</option>
+                                                    <option value="300000">300.000</option>
+                                                    <option value="400000">400.000</option>
+                                                    <option value="500000">500.000</option>
+                                                </select>
+                                            </div>
                                             <div class="form-group text-right">
                                                 <button type="button" id="generateImage" class="btn btn-success"
                                                     data-product-id="{{ $products->id }}"
@@ -150,11 +160,11 @@
                                         </form>
                                         
                                     </div>
-                                    <script>
+                                    {{-- <script>
                                         // Cần viết ở đoạn này để lưu hình 
-                                    </script>
+                                    </script> --}}
 
-                            <form action="{{ route('client.savePrice') }}" method="POST">
+                            {{-- <form action="{{ route('client.savePrice') }}" method="POST">
                                 @csrf
                                 <!-- CSRF Token for Laravel -->
                                 <div class="form-group">
@@ -167,7 +177,7 @@
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Submit</button>
-                            </form>
+                            </form> --}}
 
 
                             <p>{{$products->description}}</p>

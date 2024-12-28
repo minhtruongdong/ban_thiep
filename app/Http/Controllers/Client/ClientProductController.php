@@ -147,9 +147,10 @@ class ClientProductController extends Controller
 
     // Đường dẫn để truy cập file
     $filePath = asset('custom_images/' . $fileName);
-
+    
     // Lưu vào bảng carts
-    DB::table('carts')->insert([
+    $cart = DB::table('carts')->insert([
+        
         'image_custom' => $fileName, // Lưu tên file hình ảnh
         'cart_total' => 100000, // Ví dụ
         'cart_date' => now(), // Ví dụ
@@ -158,7 +159,7 @@ class ClientProductController extends Controller
         'payment_id' => 1, // Ví dụ
         'product_id' => $id, // Lấy ID sản phẩm
     ]);
-
+    
     return response()->json(['success' => 'Hình ảnh đã được lưu thành công!']);
 }
 }

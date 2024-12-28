@@ -189,6 +189,14 @@ th {
                 
             
             <tr>
+                @foreach ($item_cart as $value)
+                    <table>
+                        <tr>
+                            <td><img src="{{$value->image_custom}}" alt=""></td>
+                            <td>{{$value->status}}</td>
+                        </tr>
+                    </table>
+                @endforeach
                 <td><img src="{{(asset('images/'.$item->attributes->image))}}" alt="" height="70px" ></td>
                 <td>{{$item -> name}} </td>
                 <td>{{number_format($item ->price,0,"",".")}}VND</td>

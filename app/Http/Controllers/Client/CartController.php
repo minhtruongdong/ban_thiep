@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Carts;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Cart;
@@ -16,28 +17,31 @@ class CartController extends Controller
 
     public function cart(){
         $cartCollection = Cart::getContent();
+        $item_cart = Carts::all();
+        // dd($item_cart);
         // dd($cartCollection);
         return view('client.pages.cart.cartPopup', [
-            'cartCollection' => $cartCollection
+            'cartCollection' => $cartCollection,
+            'item_cart' => $item_cart,
         ]);
     }
     
-    public function addToCart($id, $quantity){
+    // public function addToCart($id, $quantity){
         
-        $product = Product::find($id);
+    //     $product = Product::find($id);
 
-        Cart::add(array(
-            'id' => $product->id, // inique row ID
-            'name' => $product->name,
-            'price' => $product->price,
-            'quantity' => $quantity,
-            'attributes' => array(
-            'image' => $product->image
-            )
-        ));
+    //     Cart::add(array(
+    //         'id' => $product->id, // inique row ID
+    //         'name' => $product->name,
+    //         'price' => $product->price,
+    //         'quantity' => $quantity,
+    //         'attributes' => array(
+    //         'image' => $product->image
+    //         )
+    //     ));
 
-        return redirect()->route('client.cart');
-    }
+    //     return redirect()->route('client.cart');
+    // }
 
     public function cartDelete($id){
 
@@ -135,4 +139,20 @@ class CartController extends Controller
             }
             // vui lòng tham khảo thêm tại code demo
     }
+    public function addToCart($id, $quantity){
+        
+            $product = Product::find($id);
+    
+            Cart::add(array(
+                'id' => $product->id, // inique row ID
+                'name' => $product->name,
+                'price' => $product->price,
+                'quantity' => $quantity,
+                'attributes' => array(
+                'image' => $product->image
+                )
+            ));
+    
+            return redirect()->route('client.cart');
+        }
 }
