@@ -166,20 +166,4 @@ class CartController extends Controller
             }
             // vui lòng tham khảo thêm tại code demo
     }
-    public function addToCart($id, $quantity){
-        
-            $product = Product::find($id);
-    
-            Cart::add(array(
-                'id' => $product->id, // inique row ID
-                'name' => $product->name,
-                'price' => $product->price,
-                'quantity' => $quantity,
-                'attributes' => array(
-                'image' => $product->image
-                )
-            ));
-    
-            return redirect()->route('client.cart');
-        }
 }
