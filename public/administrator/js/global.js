@@ -597,6 +597,7 @@ $(function() {
                         recipient_name: $('#recipientName').val(),
                         custom_message: $('#customMessage').val(),
                         recipientPrice: $('#recipientPrice').val(),
+                        recipientEmail: $('#recipientEmail').val(),
                         save_to_carts: true,
                     },
                     success: function (response) {

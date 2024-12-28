@@ -149,6 +149,7 @@ class ClientProductController extends Controller
     // Đường dẫn để truy cập file
     $filePath = asset('custom_images/' . $fileName);
     $money = $request->input('recipientPrice');
+    $email = $request->input('recipientEmail');
     
     // Lưu vào bảng carts
     $cartId = DB::table('carts')->insertGetId([
@@ -165,7 +166,7 @@ class ClientProductController extends Controller
         'cart_id' => $cartId, // ID của cart vừa tạo
         // 'product_id' => $id, // ID sản phẩm
         'money' => $money, // Giá sản phẩm
-        'recipient_email' => 'minhtruongdong@gmail.com',
+        'recipient_email' => $email,
         'quantity' => 1, // Số lượng, có thể thay đổi theo yêu cầu
     ]);
     
