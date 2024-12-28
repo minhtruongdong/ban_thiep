@@ -229,7 +229,33 @@ public function uploadImage(Request $request, $id)
                 'updated_at' => now()
             ]);
 
+<<<<<<< HEAD
             DB::commit();
+=======
+            $imageData = $request->input('image');
+
+            // Tách dữ liệu base64
+            list($type, $imageData) = explode(';', $imageData);
+            list(, $imageData) = explode(',', $imageData);
+            $imageData = base64_decode($imageData);
+
+            // Tạo tên file
+            $fileName = 'product_' . $id . '_custom_' . time() . '.png';
+
+            // Đường dẫn tới thư mục custom_images trong public
+            $path = public_path('custom_images');
+
+            // Kiểm tra và tạo thư mục nếu chưa tồn tại
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+
+            // Lưu file
+            file_put_contents($path . '/' . $fileName, $imageData);
+
+            // Đường dẫn để truy cập file
+            $filePath = asset('custom_images/' . $fileName);
+>>>>>>> refs/remotes/origin/devhao
 
             return response()->json([
                 'success' => true,
@@ -262,4 +288,7 @@ public function uploadImage(Request $request, $id)
         ], 500);
     }
 }
+<<<<<<< HEAD
 }
+=======
+>>>>>>> refs/remotes/origin/devhao
