@@ -4,10 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Carts;
-<<<<<<< HEAD
 use App\Models\CartDetail;
-=======
->>>>>>> refs/remotes/origin/main
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Cart;
@@ -45,32 +42,6 @@ class CartController extends Controller
         return redirect()->route('client.cartList');
     }
 
-<<<<<<< HEAD
-    public function cartDelete($id)
-    {
-        Cart::remove($id);
-        return response()->json(['status' => 200]);
-    }
-
-    public function cartUpdate(Request $request)
-    {
-        Cart::update($request->id, [
-            'quantity' => [
-                'relative' => false,
-                'value' => $request->quantity
-            ]
-        ]);
-        return response()->json(['status' => 200]);
-    }
-
-    public function getCartTotal()
-    {
-        return response()->json([
-            'total' => number_format(Cart::getTotal(), 0, "", "."),
-            'status' => 200
-        ]);
-    }
-=======
     public function cart(){
         $cartCollection = Cart::getContent();
         $item_cart = Carts::all();
@@ -211,5 +182,4 @@ class CartController extends Controller
     
             return redirect()->route('client.cart');
         }
->>>>>>> refs/remotes/origin/main
 }

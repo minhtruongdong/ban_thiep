@@ -29,10 +29,10 @@
             <div class="empty-space h30-xs h60-md"></div>
 
             <div class="row">
-                <div class="col-md-9 col-sm-9 pull-right">
+                <div class="col-md-10 col-sm-10 pull-right">
                     <div class="detail-item">
                         <div class="row">
-                            <div class="col-md-7">
+                            <div class="col-md-6">
                                 <img class="img-main" src="{{asset('images/'.$products->image)}}" alt="" height="500px">
                                 <div class="img-preview">
                                     @foreach($products->product_image as $pi)
@@ -67,7 +67,7 @@
                                     thumbnail.addEventListener("click", () => changeMainImage(thumbnail));
                                 });
                             </script>
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <article class="description">
                                     <h3 class="h3">{{ $products->name}}</h3>
                                     <div class="product-detail-choose">
@@ -161,24 +161,6 @@
                                         </form>
                                         
                                     </div>
-                                    {{-- <script>
-                                        // Cần viết ở đoạn này để lưu hình 
-                                    </script> --}}
-
-                            {{-- <form action="{{ route('client.savePrice') }}" method="POST">
-                                @csrf
-                                <!-- CSRF Token for Laravel -->
-                                <div class="form-group">
-                                    <label for="price_gift">Mệnh Giá Tiền:</label>
-                                    <select class="form-control" id="price_gift" name="price_gift">
-                                        <option value="1">100.000 VND</option>
-                                        <option value="2">200.000 VND</option>
-                                        <option value="3">300.000 VND</option>
-                                        <option value="4">500.000 VND</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </form> --}}
 
 
                             <p>{{$products->description}}</p>
@@ -351,7 +333,7 @@
 
 
 
-            <div class="col-md-3 col-sm-3">
+            <div class="col-md-2 col-sm-2">
                 <div class="shop-form-2">
 
                     <div class="search">
