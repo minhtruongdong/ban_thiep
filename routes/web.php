@@ -98,7 +98,7 @@ Route::prefix('client')->name('client.')->group(function(){
     Route::prefix('product') -> name('product.') ->controller(ClientProductController::class)->group(function(){
         Route::get('/the-loai/{id}','category')->name('category');
         Route::get('/chi-tiet-san-pham/{id}','productdetail')->name('productdetail');
-        Route::post('/save-custom-image/{id}', 'saveCustomImage')->name('saveCustomImage');
+//        Route::post('/save-custom-image/{id}', 'saveCustomImage')->name('saveCustomImage');
         Route::post('/save_image_localhost/{id}','uploadImage')->name('uploadImage');
     });
 

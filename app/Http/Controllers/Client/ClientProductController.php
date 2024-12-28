@@ -10,6 +10,7 @@ use Darryldecode\Cart\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ClientProductController extends Controller
 {
@@ -108,57 +109,157 @@ class ClientProductController extends Controller
     //         ], 500);
     //     }
     // }
-    public function uploadImage(Request $request, $id)
+//     public function uploadImage(Request $request, $id)
+// {
+//     $product = Product::findOrFail($id);
+
+//     // Validate input
+//     $request->validate([
+//         'image' => 'required',
+//         'recipient_name' => 'required|string',
+//         'custom_message' => 'required|string',
+//     ]);
+
+//     $imageData = $request->input('image');
+
+//     // Tách dữ liệu base64
+//     list($type, $imageData) = explode(';', $imageData);
+//     list(, $imageData) = explode(',', $imageData);
+//     $imageData = base64_decode($imageData);
+
+//     // Kiểm tra xem dữ liệu hình ảnh có hợp lệ không
+//     if ($imageData === false) {
+//         throw new \Exception('Dữ liệu hình ảnh không hợp lệ.');
+//     }
+
+//     // Tạo tên file
+//     $fileName = 'product_' . $id . '_custom_' . time() . '.png';
+
+//     // Đường dẫn tới thư mục custom_images trong public
+//     $path = public_path('custom_images');
+
+//     // Kiểm tra và tạo thư mục nếu chưa tồn tại
+//     if (!file_exists($path)) {
+//         mkdir($path, 0777, true);
+//     }
+
+//     // Lưu file
+//     file_put_contents($path . '/' . $fileName, $imageData);
+
+//     // Đường dẫn để truy cập file
+//     $filePath = asset('custom_images/' . $fileName);
+
+//     // Lưu vào bảng carts
+//     DB::table('carts')->insert([
+//         'image_custom' => $fileName, // Lưu tên file hình ảnh
+//         'cart_total' => 100000, // Ví dụ
+//         'cart_date' => now(), // Ví dụ
+//         'status' => 1, // Ví dụ
+//         'user_id' => Auth::user()->id, // Lấy ID người dùng hiện tại
+//         'payment_id' => 1, // Ví dụ
+//         'product_id' => $id, // Lấy ID sản phẩm
+//     ]);
+
+//     return response()->json(['success' => 'Hình ảnh đã được lưu thành công!']);
+// }
+public function uploadImage(Request $request, $id)
 {
-    $product = Product::findOrFail($id);
+    try {
+        Log::info('Start uploading image', [
+            'product_id' => $id,
+            'has_image' => $request->has('image'),
+            'recipient_name' => $request->recipient_name
+        ]);
 
-    // Validate input
-    $request->validate([
-        'image' => 'required',
-        'recipient_name' => 'required|string',
-        'custom_message' => 'required|string',
-    ]);
+        $product = Product::findOrFail($id);
 
-    $imageData = $request->input('image');
+        // Validate input
+        $request->validate([
+            'image' => 'required',
+            'recipient_name' => 'required|string',
+            'custom_message' => 'required|string',
+        ]);
 
-    // Tách dữ liệu base64
-    list($type, $imageData) = explode(';', $imageData);
-    list(, $imageData) = explode(',', $imageData);
-    $imageData = base64_decode($imageData);
+        $imageData = $request->input('image');
+        
+        // Log độ dài của dữ liệu ảnh
+        Log::info('Image data length: ' . strlen($imageData));
 
-    // Kiểm tra xem dữ liệu hình ảnh có hợp lệ không
-    if ($imageData === false) {
-        throw new \Exception('Dữ liệu hình ảnh không hợp lệ.');
+        // Tách dữ liệu base64
+        list($type, $imageData) = explode(';', $imageData);
+        list(, $imageData) = explode(',', $imageData);
+        $imageData = base64_decode($imageData);
+
+        if ($imageData === false) {
+            throw new \Exception('Invalid image data');
+        }
+
+        // Tạo tên file
+        $fileName = 'product_' . $id . '_' . time() . '.png';
+        $path = public_path('custom_images');
+
+        // Kiểm tra và tạo thư mục
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        // Kiểm tra quyền ghi
+        if (!is_writable($path)) {
+            throw new \Exception('Directory is not writable: ' . $path);
+        }
+
+        // Lưu file
+        $fullPath = $path . '/' . $fileName;
+        if (file_put_contents($fullPath, $imageData) === false) {
+            throw new \Exception('Failed to save image file');
+        }
+
+        // Lưu vào database
+        DB::beginTransaction();
+        try {
+            $cart = DB::table('carts')->insert([
+                'image_custom' => $fileName,
+                'cart_total' => $product->price ?? 100000,
+                'cart_date' => now(),
+                'status' => 1,
+                'user_id' => Auth::id() ?? 1, // Fallback nếu không có user
+                'payment_id' => 1,
+                'product_id' => $id,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Lưu ảnh thành công',
+                'data' => [
+                    'file_name' => $fileName,
+                    'file_path' => asset('custom_images/' . $fileName)
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Xóa file nếu lưu DB thất bại
+            if (file_exists($fullPath)) {
+                unlink($fullPath);
+            }
+            throw $e;
+        }
+
+    } catch (\Exception $e) {
+        Log::error('Error in uploadImage', [
+            'error' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        ]);
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Có lỗi xảy ra: ' . $e->getMessage()
+        ], 500);
     }
-
-    // Tạo tên file
-    $fileName = 'product_' . $id . '_custom_' . time() . '.png';
-
-    // Đường dẫn tới thư mục custom_images trong public
-    $path = public_path('custom_images');
-
-    // Kiểm tra và tạo thư mục nếu chưa tồn tại
-    if (!file_exists($path)) {
-        mkdir($path, 0777, true);
-    }
-
-    // Lưu file
-    file_put_contents($path . '/' . $fileName, $imageData);
-
-    // Đường dẫn để truy cập file
-    $filePath = asset('custom_images/' . $fileName);
-
-    // Lưu vào bảng carts
-    DB::table('carts')->insert([
-        'image_custom' => $fileName, // Lưu tên file hình ảnh
-        'cart_total' => 100000, // Ví dụ
-        'cart_date' => now(), // Ví dụ
-        'status' => 1, // Ví dụ
-        'user_id' => Auth::user()->id, // Lấy ID người dùng hiện tại
-        'payment_id' => 1, // Ví dụ
-        'product_id' => $id, // Lấy ID sản phẩm
-    ]);
-
-    return response()->json(['success' => 'Hình ảnh đã được lưu thành công!']);
 }
 }
