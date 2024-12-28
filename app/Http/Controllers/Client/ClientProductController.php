@@ -229,9 +229,7 @@ public function uploadImage(Request $request, $id)
                 'updated_at' => now()
             ]);
 
-<<<<<<< HEAD
             DB::commit();
-=======
             $imageData = $request->input('image');
 
             // Tách dữ liệu base64
@@ -255,7 +253,6 @@ public function uploadImage(Request $request, $id)
 
             // Đường dẫn để truy cập file
             $filePath = asset('custom_images/' . $fileName);
->>>>>>> refs/remotes/origin/devhao
 
             return response()->json([
                 'success' => true,
@@ -288,7 +285,4 @@ public function uploadImage(Request $request, $id)
         ], 500);
     }
 }
-<<<<<<< HEAD
 }
-=======
->>>>>>> refs/remotes/origin/devhao
