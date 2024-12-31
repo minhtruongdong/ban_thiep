@@ -8,6 +8,7 @@ use App\Models\CartDetail;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Cart;
+use Darryldecode\Cart\Cart as CartCart;
 
 class CartController extends Controller
 {
@@ -15,32 +16,40 @@ class CartController extends Controller
     {
         $cartItems = Carts::with('cartDetail')->get();
         // Debug để xem dữ liệu
-        dd([
-            'cartItems' => $cartItems->toArray(),
-            'first_item' => $cartItems->first(),
-            'cart_detail' => $cartItems->first()->cartDetail
-        ]);
+        // dd([
+        //     'cartItems' => $cartItems->toArray(),
+        //     'first_item' => $cartItems->first(),
+        //     'cart_detail' => $cartItems->first()->cartDetail
+        // ]);
         
         return view('client.pages.cart.cartPopup', ['cartItems' => $cartItems]);
     }
 
-    public function addToCart($id, $quantity)
-    {
-        $cart = Carts::with('cartDetail')->find($id);
-        dd($cart);
-        Cart::add([
-            'id' => $cart->id,
-            'name' => $cart->name,
-            'price' => $cart->cartDetail->money,
-            'quantity' => $quantity,
-            'attributes' => [
-                'image' => $cart->image_custom,
-                'recipient_email' => $cart->cartDetail->recipient_email,
-            ]
-        ]);
+    public function addToCart(Request $request, $id, $quantity){
         
-        return redirect()->route('client.cartList');
-    }
+        $product = Product::find($id);
+        $imageCustom = $request->input('image_custom');
+        $price = $request->input('price');
+        // $priceGift = $request->query('price_gift', $product->price_gift);
+        // 'price_gift' => $priceGift,
+
+        if (!$product) {
+            return redirect('/404');
+        }
+
+        Cart::add(array(
+            'id' => $product->id,
+            'name' => $product->name,
+            'price' => $price,
+            'quantity' => $quantity,
+            'options' => [
+            'image_custom' => $imageCustom,
+        ]
+        ));
+        
+         
+        return redirect()->route('client.cart');
+    }   
 
     public function cart(){
         $cartCollection = Cart::getContent();
@@ -94,18 +103,20 @@ class CartController extends Controller
            ]
         );
     }
+
     public function checkoutvnpay_payment(){
        
-        
+        $product = Product::all();
+        // dd($product);
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
         $vnp_Returnurl = "http://127.0.0.1:8000/client/thanh-toan";
         $vnp_TmnCode = "QDNBN1PJ";//Mã website tại VNPAY 
         $vnp_HashSecret = "H5PAZUPT8EDRWWC6GDN2WTONJHXV8D4Q"; //Chuỗi bí mật
         
-        $vnp_TxnRef = '1000'; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
-        $vnp_OrderInfo = 'Thanh toan don hang test';
+        $vnp_TxnRef = 'AHCD'; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
+        $vnp_OrderInfo = 'Thanh toan';
         $vnp_OrderType = 'billpayment';
-        $vnp_Amount = 20000 * 100;
+        $vnp_Amount = ' ' . $product->attributes->price;
         $vnp_Locale = 'vn';
         $vnp_BankCode = 'NCB';
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
@@ -165,5 +176,14 @@ class CartController extends Controller
                 echo json_encode($returnData);
             }
             // vui lòng tham khảo thêm tại code demo
+    }
+
+
+    
+    public function showcart(){
+
+        $cart_item = Carts::all();
+
+        return view('client.pages.cart.cart',['cart_item' => $cart_item]);
     }
 }

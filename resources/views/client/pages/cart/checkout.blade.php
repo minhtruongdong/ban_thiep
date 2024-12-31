@@ -10,6 +10,7 @@
                     <div class="empty-space h90-xs h100-md"></div>
                     <div class="empty-space h0-xs h80-md"></div>
                     <div class="row">
+                        
                         <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0">
                             <article class="text-center grey-dark">
                                 <h1 class="h2">Checkout<span></span></h1>
