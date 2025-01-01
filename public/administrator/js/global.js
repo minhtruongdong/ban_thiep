@@ -584,7 +584,6 @@ $(function() {
             const $button = $(this);
             const productId = $button.data('product-id');
             const saveUrl = $button.data('save-url').replace(':id', productId);
-            
             html2canvas(document.querySelector('#productDisplay')).then(function (canvas) {
                 const imageData = canvas.toDataURL('image/png');
                 
@@ -597,10 +596,13 @@ $(function() {
                         recipient_name: $('#recipientName').val(),
                         custom_message: $('#customMessage').val(),
                         recipientPrice: $('#recipientPrice').val(),
+                        recipientEmail: $('#recipientEmail').val(),
                         save_to_carts: true,
                     },
                     success: function (response) {
+                        // const newCartId = response.cart_id;
                         alert('Hình ảnh đã được lưu thành công!');
+                        window.location.href = `http://localhost:8000/client/cart`
                     },
                     error: function (error) {
                         console.error(error);

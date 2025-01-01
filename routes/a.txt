@@ -1,0 +1,12 @@
+Route::get('index',[ClientController::class,'index'])->name('index');
+    Route::get('about',[ClientController::class,'about'])->name('about');
+    Route::get('contact',[ClientController::class,'contact'])->name('contact');
+    Route::get('savePrice',[ClientController::class,'savePrice'])->name('savePrice');
+
+    Route::get('/them-gio-hang/{id}/{quantity}',[CartController::class,'addToCart'])->name('addToCart');
+    Route::get('/gio-hang',[CartController::class,'cart'])->name('cart');
+    Route::get('xoa-gio-hang/{id}',[CartController::class,'cartDelete'])->name('cartDelete');
+    Route::post('cap-nhat-gio-hang',[CartController::class,'cartUpdate'])->name('cartUpdate');
+    Route::get('/thanh-toan',[CartController::class,'checkout'])->name('checkout');
+    Route::post('/thanh-toan',[CartController::class,'checkoutPost'])->name('checkoutPost');
+    Route::post('/thanh-toan-vnpay',[CartController::class,'checkoutvnpay_payment'])->name('checkoutvnpay_payment');
