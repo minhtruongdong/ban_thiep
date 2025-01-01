@@ -59,6 +59,8 @@
 
 
     })
+
+    
 </script>
 
 
@@ -163,7 +165,10 @@ th {
 .checkout_payment{
     float: right;
     padding: 10px 20px;
+    background-color: #45a049;
+    color: #f2f2f2;
 }
+
 </style>
 
 
@@ -179,30 +184,36 @@ th {
                 <th>Image</th>
                 <th>Sản phẩm</th>
                 <th>Giá</th>
+                {{-- <th>Tiền Tặng</th> --}}
                 <th>Số lượng</th>
                 <th>Tổng</th>
                 <th>Hành động</th>
             </tr>
         </thead>
         <tbody>
+            @if(is_null($cartCollection))
+                <p>Giỏ hàng trống.</p>
+            @else
             @foreach ($cartCollection as $item)
-                
-            
+    
             <tr>
                 <td><img src="{{(asset('images/'.$item->attributes->image))}}" alt="" height="70px" ></td>
-                <td>{{$item -> name}} </td>
+                <td>{{$item->name}} </td>
                 <td>{{number_format($item ->price,0,"",".")}}VND</td>
+                {{-- <td>{{ number_format($item->price_gift, 0, "", ".") }} VND</td> --}}
+                
                 <td>
                     <div class="quantity-control">
-                        <button class="quantity-btn-minus">-</button>
+                        {{-- <button class="quantity-btn-minus">-</button> --}}
                         <input type="number" class="quantity-input" min="0" value="{{$item->quantity}}" data-productid="{{$item->id}}" name="quantity-cart-product">
-                        <button class="quantity-btn-plus">+</button>
+                        {{-- <button class="quantity-btn-plus">+</button> --}}
                     </div>
                 </td>
                 <td>{{number_format($item->price * $item->quantity,0,"",".")}}VND</td>
                 <td><a href="{{route('client.cartDelete',['id'=>$item->id])}}" class="remove-btn">Xóa</a> </td>
             </tr>
             @endforeach
+            @endif
         </tbody>
     </table>
     <div id="total">Tổng cộng: {{number_format(Cart::getSubTotal(),0,"",".")}}VND</div>
@@ -211,7 +222,8 @@ th {
     <form action="{{route('client.checkoutvnpay_payment')}}" method="POST">
         @csrf
    <button class="checkout_payment" name="redirect"> Thanh Toan VNPAY </button>
-    </form>
+
+   </form>
 </div>
 
 

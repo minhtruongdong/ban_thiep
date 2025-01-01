@@ -43,8 +43,8 @@ class CartController extends Controller
             'price' => $price,
             'quantity' => $quantity,
             'options' => [
-                'image_custom' => $imageCustom,
-            ]
+            'image_custom' => $imageCustom,
+        ]
         ));
 
 
@@ -95,12 +95,12 @@ class CartController extends Controller
                 'relative' => false,
                 'value' => $quantity
             )
-        ));
+          ));
 
         return response()->json([
-                'status' =>200
+            'status' =>200
 
-            ]
+           ]
         );
     }
 
@@ -167,15 +167,15 @@ class CartController extends Controller
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
         $returnData = array('code' => '00'
-        , 'message' => 'success'
-        , 'data' => $vnp_Url);
-        if (isset($_POST['redirect'])) {
-            header('Location: ' . $vnp_Url);
-            die();
-        } else {
-            echo json_encode($returnData);
-        }
-        // vui lòng tham khảo thêm tại code demo
+            , 'message' => 'success'
+            , 'data' => $vnp_Url);
+            if (isset($_POST['redirect'])) {
+                header('Location: ' . $vnp_Url);
+                die();
+            } else {
+                echo json_encode($returnData);
+            }
+            // vui lòng tham khảo thêm tại code demo
     }
 
 

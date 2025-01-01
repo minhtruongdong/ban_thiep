@@ -574,99 +574,46 @@ $(function() {
             const customMessage = $(this).val().trim();
             $('#customTextDisplay').find('.custom-message').text(customMessage);
         });
-        
+
 
 
 
     // Khi nhấn nút "Xác nhận"
-    // $('#generateImage').on('click', function () {
-    //     if (typeof html2canvas !== 'undefined') {
-    //         const $button = $(this);
-    //         const productId = $button.data('product-id');
-    //         const saveUrl = $button.data('save-url').replace(':id', productId);
-            
-    //         html2canvas(document.querySelector('#productDisplay')).then(function (canvas) {
-    //             const imageData = canvas.toDataURL('image/png');
-                
-    //             $.ajax({
-    //                 url: saveUrl,
-    //                 method: 'POST',
-    //                 data: {
-    //                     _token: $button.data('csrf'),
-    //                     image: imageData,
-    //                     recipient_name: $('#recipientName').val(),
-    //                     custom_message: $('#customMessage').val(),
-    //                     save_to_carts: true,
-    //                 },
-    //                 success: function (response) {
-    //                     alert('Hình ảnh đã được lưu thành công!');
-    //                 },
-    //                 error: function (error) {
-    //                     console.error(error);
-    //                     alert('Có lỗi xảy ra khi lưu hình ảnh!');
-    //                 }
-    //             });
-    //         });
-    //     } else {
-    //         alert('Thư viện html2canvas chưa được tải. Vui lòng kiểm tra!');
-    //     }
-    // });
     $('#generateImage').on('click', function () {
-        const $button = $(this);
-        const productId = $button.data('product-id');
-        // Sử dụng route name mới
-        const saveUrl = $button.data('save-url'); // Route::post('/save_image_localhost/{id}','uploadImage')
-    
-        // Validate
-        const recipientName = $('#recipientName').val().trim();
-        const customMessage = $('#customMessage').val().trim();
-    
-        if (!recipientName || !customMessage) {
-            alert('Vui lòng nhập đầy đủ thông tin!');
-            return;
-        }
-    
-        // Disable button và hiển thị loading
-        $button.prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Đang xử lý...');
-    
-        // Capture ảnh bằng html2canvas
-        html2canvas(document.querySelector('#productDisplay')).then(function (canvas) {
-            const imageData = canvas.toDataURL('image/png');
-            
-            // Gửi AJAX request
-            $.ajax({
-                url: saveUrl, // URL từ route mới
-                method: 'POST',
-                data: {
-                    _token: $button.data('csrf'),
-                    image: imageData,
-                    recipient_name: recipientName,
-                    custom_message: customMessage
-                },
-                success: function (response) {
-                    if (response.success) {
-                        alert('Lưu ảnh thành công!');
-                        console.log('File path:', response.data?.file_path);
-                    } else {
-                        alert('Có lỗi xảy ra: ' + response.message);
-                    }
-                },
-                error: function (xhr) {
-                    console.error('Error:', xhr);
-                    alert('Có lỗi xảy ra khi lưu ảnh!');
-                },
-                complete: function () {
-                    // Restore button state
-                    $button.prop('disabled', false).html('Xác nhận');
-                }
-            });
-        }).catch(function(error) {
-            console.error('Error capturing image:', error);
-            alert('Có lỗi xảy ra khi tạo ảnh!');
-            $button.prop('disabled', false).html('Xác nhận');
-        });
-    });
+        if (typeof html2canvas !== 'undefined') {
+            const $button = $(this);
+            const productId = $button.data('product-id');
+            const saveUrl = $button.data('save-url').replace(':id', productId);
+            html2canvas(document.querySelector('#productDisplay')).then(function (canvas) {
+                const imageData = canvas.toDataURL('image/png');
 
+                $.ajax({
+                    url: saveUrl,
+                    method: 'POST',
+                    data: {
+                        _token: $button.data('csrf'),
+                        image: imageData,
+                        recipient_name: $('#recipientName').val(),
+                        custom_message: $('#customMessage').val(),
+                        recipientPrice: $('#recipientPrice').val(),
+                        recipientEmail: $('#recipientEmail').val(),
+                        save_to_carts: true,
+                    },
+                    success: function (response) {
+                        // const newCartId = response.cart_id;
+                        alert('Hình ảnh đã được lưu thành công!');
+                        window.location.href = `http://localhost:8000/client/cart`
+                    },
+                    error: function (error) {
+                        console.error(error);
+                        alert('Có lỗi xảy ra khi lưu hình ảnh!');
+                    }
+                });
+            });
+        } else {
+            alert('Thư viện html2canvas chưa được tải. Vui lòng kiểm tra!');
+        }
+    });
     });
 
 

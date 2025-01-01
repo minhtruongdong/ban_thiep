@@ -44,6 +44,9 @@
                     <br>
                     <p>Total: <span>{{number_format(Cart::getSubTotal(),0,"",".")}}VND</span></p>
                 </div>
+
+                
+                
                 <!-- login -->
                 <div class="login-wrapper">
                         <div class="login" data-rel="2">

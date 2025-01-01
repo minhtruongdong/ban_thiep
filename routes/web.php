@@ -81,30 +81,44 @@ Route::prefix('auth')->name('auth.')->group(function(){
 
 
 
-Route::prefix('client')->name('client.')->group(function(){
-    Route::get('index',[ClientController::class,'index'])->name('index');
-    Route::get('about',[ClientController::class,'about'])->name('about');
-    Route::get('contact',[ClientController::class,'contact'])->name('contact');
-    Route::get('savePrice',[ClientController::class,'savePrice'])->name('savePrice');
+Route::middleware(['web'])->group(function () {
+    Route::prefix('client')->name('client.')->group(function(){
+        Route::get('index',[ClientController::class,'index'])->name('index');
+        Route::get('about',[ClientController::class,'about'])->name('about');
+        Route::get('contact',[ClientController::class,'contact'])->name('contact');
+        Route::get('savePrice',[ClientController::class,'savePrice'])->name('savePrice');
 
-    Route::get('/them-gio-hang/{id}/{quantity}',[CartController::class,'addToCart'])->name('addToCart');
+        Route::get('/them-gio-hang/{id}/{quantity}',[CartController::class,'addToCart'])->name('addToCart');
+        Route::get('/gio-hang',[CartController::class,'cart'])->name('cart');
+        Route::get('xoa-gio-hang/{id}',[CartController::class,'cartDelete'])->name('cartDelete');
+        Route::post('cap-nhat-gio-hang',[CartController::class,'cartUpdate'])->name('cartUpdate');
+        Route::get('/thanh-toan',[CartController::class,'checkout'])->name('checkout');
+        Route::post('/thanh-toan',[CartController::class,'checkoutPost'])->name('checkoutPost');
+        Route::post('/thanh-toan-vnpay',[CartController::class,'checkoutvnpay_payment'])->name('checkoutvnpay_payment');
 
-    Route::get('/gio-hang',[CartController::class,'cart'])->name('cart');
-    Route::get('xoa-gio-hang/{id}',[CartController::class,'cartDelete'])->name('cartDelete');
-    Route::post('cap-nhat-gio-hang/',[CartController::class,'cartUpdate'])->name('cartUpdate');
-    Route::get('/thanh-toan',[CartController::class,'checkout'])->name('checkout');
+        Route::prefix('product') -> name('product.') ->controller(ClientProductController::class)->group(function(){
+            Route::get('/the-loai/{id}','category')->name('category');
+            Route::get('/chi-tiet-san-pham/{id}','productdetail')->name('productdetail');
+            Route::post('/save-custom-image/{id}', 'saveCustomImage')->name('saveCustomImage');
+            Route::post('/save_image_localhost/{id}','uploadImage')->name('uploadImage');
+        });
 
 
-    Route::prefix('product') -> name('product.') ->controller(ClientProductController::class)->group(function(){
-        Route::get('/the-loai/{id}','category')->name('category');
-        Route::get('/chi-tiet-san-pham/{id}','productdetail')->name('productdetail');
-//        Route::post('/save-custom-image/{id}', 'saveCustomImage')->name('saveCustomImage');
-        Route::post('/save_image_localhost/{id}','uploadImage')->name('uploadImage');
+        Route::get('/cart', [ClientProductController::class, 'showCart'])->name('cart');
+        Route::get('/check-session', function () {
+            $cart = session('cart');
+            $cartDetail = session('cart_detail');
+
+            return response()->json([
+                'cart' => $cart,
+                'cartDetail' => $cartDetail,
+            ]);
+        });
+
+
     });
-
-// vnpay
-
-    Route::post('/thanh-toan-vnpay',[CartController::class,'checkoutvnpay_payment'])->name('checkoutvnpay_payment');
-
-
 });
+
+// Route::get('/cart/total', [CartController::class, 'getCartTotal'])->name('client.getCartTotal');
+
+

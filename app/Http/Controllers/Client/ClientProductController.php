@@ -8,9 +8,8 @@ use App\Models\Category;
 use App\Models\Product;
 use Darryldecode\Cart\Cart;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 class ClientProductController extends Controller
 {
@@ -18,33 +17,33 @@ class ClientProductController extends Controller
 
         $category = Category::findOrFail($id);
         $category_list =  Category::with('product')
-            ->where('parent_id',0)
-            ->get();
+        ->where('parent_id',0)
+        ->get();
 
         $products = Product::with('category')->where('category_id',$id)->paginate(9);
 
 
 
         return view('client.pages.product.shop',[
-                'category' => $category,
-                'category_list' => $category_list,
-                'products'=> $products,
-                'id' => $id,
+            'category' => $category,
+            'category_list' => $category_list,
+            'products'=> $products,
+            'id' => $id,
 
-            ]
-        );
+        ]
+    );
     }
 
     public function productdetail($id){
 
         $products = Product::with('product_image','category')->where('id',$id)->first();
         $category_list =  Category::with('product')
-            ->where('parent_id',0)
-            ->get();
+        ->where('parent_id',0)
+        ->get();
         $products_related = Product::with('category')
-            ->where('category_id',$products->category->id)
-            ->where('id','!=',$products->id)
-            ->paginate(4);
+        ->where('category_id',$products->category->id)
+        ->where('id','!=',$products->id)
+        ->paginate(4);
         return view('client.pages.product.productdetail',[
             'products'=> $products,
             'products_related'=>$products_related,
@@ -109,7 +108,7 @@ class ClientProductController extends Controller
     //         ], 500);
     //     }
     // }
-    public function uploadImage(Request $request, $id)
+        public function uploadImage(Request $request, $id)
     {
         $product = Product::findOrFail($id);
 
@@ -162,19 +161,19 @@ class ClientProductController extends Controller
             'status' => 1,
             'user_id' => 1,
             'payment_id' => 1,
-            'product_id' => 1,
-        ];
-
-        $cartDetailData = [
-            'money' => $money,
             'recipient_email' => $email,
+            'product_id' => 1,
+            'money' => $money,
             'quantity' => 1,
         ];
 
 
 
-        session(['cart' => $cartData]);
-        session(['cart_detail' => $cartDetailData]);
+        Session::push('cart',$cartData);
+
+
+        Log::info('Cart Data:', session('cart'));
+
 
         // Lưu vào bảng carts
         // $cartId = DB::table('carts')->insertGetId([
@@ -200,18 +199,24 @@ class ClientProductController extends Controller
     public function showCart()
     {
         // Lấy dữ liệu giỏ hàng từ session
-        $cart = session('cart');
-        $cartDetail = session('cart_detail');
+        $cart = session('cart'); // Lấy dữ liệu giỏ hàng
+
+        if ($cart) {
+            Log::info('Cart data:', ['cart' => $cart]);
+        } else {
+            Log::warning('Cart is empty.');
+        }
+
 
         // Kiểm tra xem dữ liệu giỏ hàng có tồn tại không
-        // if (!$cart || !$cartDetail) {
-        //     return redirect()->route('client.index');// Hiển thị view giỏ hàng trống nếu không có dữ liệu
-        // }
+        if (!$cart ) {
+            return redirect()->route('client.index'); // Hiển thị view giỏ hàng trống nếu không có dữ liệu
+        }
 
         // Truyền dữ liệu giỏ hàng đến view
         return view('client.pages.cart.cart', [
             'cart' => $cart,
-            'cartDetail' => $cartDetail,
+
         ]);
     }
 }

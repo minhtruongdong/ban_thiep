@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('recipient_email');
             $table->bigInteger('money');
             $table->timestamps();
-            
         });
     }
 
