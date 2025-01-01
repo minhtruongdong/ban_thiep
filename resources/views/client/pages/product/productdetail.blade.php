@@ -1,7 +1,69 @@
 @extends('client.master')
 @section('title',$products->name)
 @push('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const decreaseButton = document.querySelector('.fa-caret-left');
+    const increaseButton = document.querySelector('.fa-caret-right');
+    let quantityInput = document.querySelector('.quantity input[type="number"]');
+    const addToCartButton = document.querySelector('.btn-wrap a.btn-2');
 
+     // Hàm trích xuất `id` từ `baseUrl` bằng cách sử dụng phương pháp cắt chuỗi
+     function getItemIdFromBaseUrl(baseUrl) {
+        // Giả sử URL dạng: "...?id=123&quantity=1"
+        const idMatch = baseUrl.match(/id=(\d+)/);
+        return idMatch ? idMatch[1] : null;
+    }
+
+    // Hàm cập nhật URL khi số lượng thay đổi
+    function updateCartLink(quantity, product_id) {
+    
+        let baseUrl = addToCartButton.href; // Lấy URL hiện tại từ href
+        const itemId = getItemIdFromBaseUrl(baseUrl); // Trích xuất `id` từ URL hiện tại
+        if (product_id) {
+
+            // Tạm bỏ
+            // $.ajax({
+            //     type: "POST",
+            //     url: "{{ route('client.cartUpdate') }}" ,
+            //     data: {"id": product_id, "quantity": quantity},
+            //     dataType: "json",
+            //     success: function (response) {
+            //         console.log(response)
+            //     }
+            // });
+        }
+    }
+
+    // decreaseButton.addEventListener('click', function () {
+    //     let currentQuantity = parseInt(quantityInput.value);
+    //     let product_id = $(this).data("id");
+    //     if (currentQuantity > 1) {
+    //         quantityInput.value = currentQuantity - 1;
+    //         updateCartLink(quantityInput.value, product_id);
+    //     }
+    // });
+
+    // increaseButton.addEventListener('click', function () {
+    //     let currentQuantity = parseInt(quantityInput.value);
+    //     let product_id = $(this).data("id");
+    //     quantityInput.value = currentQuantity + 1;
+    //     updateCartLink(quantityInput.value, product_id);
+    // });
+
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const productId = this.dataset.productId;
+            const quantity = parseInt(quantityInput.value);
+            let cartUrl = this.dataset.route;
+            cartUrl = cartUrl.replace(':id', productId).replace(':quantity', quantity);
+            
+            window.location.href = cartUrl;
+        });
+    });
+});
+</script>
 
 
 @endpush
@@ -146,11 +208,14 @@
                                                     <option value="500000">500.000</option>
                                                 </select>
                                             </div>
+                                            <div class="form-group">
+                                                <label for="recipientEmail">Recipient_email :</label>
+                                                <input type="text" id="recipientEmail" name="recipientEmail"
+                                                    class="form-control" placeholder="Nhập email người nhận">
+                                            </div>
                                             <div class="form-group text-right">
                                                 <button type="button" id="generateImage" class="btn btn-success"
                                                     data-product-id="{{ $products->id }}"
-                                                    {{-- data-cart-id = {{$cart_id->id}} --}}
-                                                    
                                                     data-save-url="{{ route('client.product.uploadImage', ['id' => $products->id])}}"
                                                     data-csrf="{{ csrf_token() }}">
                                                     Xác nhận
@@ -166,24 +231,25 @@
                             <p>{{$products->description}}</p>
                             </article>
                             
-                            <div class="quantity-wrapper">
+                            {{-- <div class="quantity-wrapper">
+                                
                                 <span>quantity:</span>
                                 <div class="quantity">
-                                    <input type="number" id="product-quantity" value="1" min="1">
-                                    <i class="fa fa-caret-left" aria-hidden="true"></i>
-                                    <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                    
+                                    <input type="number" value=1>
+                                    <i class="fa fa-caret-left" data-id="{{ $products->id }}" aria-hidden="true"></i>
+                                    <i class="fa fa-caret-right" data-id="{{ $products->id }}" aria-hidden="true"></i>
                                 </div>
-                            </div>
-
+                                
+                            </div> --}}
+                           
+                            {{-- <div class="btn-wrap"><a href="{{route('client.addToCart',['id'=>$products->id,'quantity'=>1])}}" class="btn-2"><span>add to cart</span></a></div> --}}
                             
-                            <div class="btn-wrap">
-                                <a href="#" class="btn-2" id="add-to-cart-btn"><span>add to cart</span></a>
-                            </div>
 
 
 
-                            <div class="btn-wrap"><a href="#" class="btn-1 border"><span>add to
-                                        favourites</span></a></div>
+                            {{-- <div class="btn-wrap"><a href="#" class="btn-1 border"><span>add to
+                                        favourites</span></a></div> --}}
                             <div class="follow-category">
                                 <span>Category:</span>
                                 <a href="{{route('client.product.category',['id'=>$products->category->id])}}"
@@ -396,29 +462,7 @@
 
                     <div class="empty-space h20-xs h35-md"></div>
 
-                    {{-- <h6 class="h6">BRANDS</h6>
-                    <div class="empty-space h10-xs"></div>
-                    <label class="checkbox-entry">
-                        <input type="checkbox" /><span>Black&White</span>
-                    </label>
-                    <label class="checkbox-entry">
-                        <input type="checkbox" /><span>Zebrano</span>
-                    </label>
-                    <label class="checkbox-entry">
-                        <input type="checkbox" /><span>Delux</span>
-                    </label>
-                    <label class="checkbox-entry">
-                        <input type="checkbox" /><span>Restoration Hardware</span>
-                    </label>
-                    <label class="checkbox-entry">
-                        <input type="checkbox" /><span>Roche Bobois</span>
-                    </label>
-                    <label class="checkbox-entry">
-                        <input type="checkbox" /><span>Edra</span>
-                    </label>
-                    <label class="checkbox-entry">
-                        <input type="checkbox" /><span>Poliform</span>
-                    </label> --}}
+                    
 
                     <div class="empty-space h50-xs"></div>
                     <div class="btn-wrap"><a href="#" class="btn-2"><span>clear all filters</span></a></div>
@@ -435,11 +479,15 @@
 
 </div>
 <!-- content -->
-<script>
+{{-- <script>
 document.addEventListener('DOMContentLoaded', function() {
     const quantityInput = document.getElementById('product-quantity');
     const addToCartBtn = document.getElementById('add-to-cart-btn');
     
+    // const imageCustom = document.getElementById('popupImage').src; 
+    // const price = document.getElementById('custom-price').value; // Giả sử bạn có một input để lấy giá tùy chỉnh
+    // const productId = "{{ $products->id }}";
+
     // Xử lý nút tăng/giảm số lượng
     document.querySelector('.fa-caret-right').addEventListener('click', function() {
         quantityInput.value = parseInt(quantityInput.value) + 1;
@@ -457,7 +505,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateAddToCartUrl() {
         const quantity = quantityInput.value;
         // Sử dụng route với cả id và quantity
-        const url = "{{ route('client.addToCart', ['id' => $products->id, 'quantity' => ':quantity']) }}".replace(':quantity', quantity);
+        const url = "{{ route('client.addToCart', ['id' => ':id', 'quantity' => ':quantity', 'image_custom' => ':image_custom', 'price' => ':price']) }}"
+            .replace(':id', productId)
+            .replace(':quantity', quantity)
+            .replace(':image_custom', encodeURIComponent(imageCustom))
+            .replace(':price', encodeURIComponent(price));
         addToCartBtn.href = url;
     }
     
@@ -468,5 +520,5 @@ document.addEventListener('DOMContentLoaded', function() {
     // Khởi tạo URL ban đầu
     updateAddToCartUrl();
 });
-</script>
+</script> --}}
 @endsection

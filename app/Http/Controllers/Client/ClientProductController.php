@@ -10,6 +10,7 @@ use Darryldecode\Cart\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ClientProductController extends Controller
 {
@@ -118,6 +119,7 @@ class ClientProductController extends Controller
         'recipient_name' => 'required|string',
         'custom_message' => 'required|string',
         'recipientPrice' => 'required|integer',
+        'recipientEmail' => 'required|string',
     ]);
 
     $imageData = $request->input('image');
@@ -148,27 +150,68 @@ class ClientProductController extends Controller
 
     // Đường dẫn để truy cập file
     $filePath = asset('custom_images/' . $fileName);
+
     $money = $request->input('recipientPrice');
+    $email = $request->input('recipientEmail');
+    $image = $fileName;
+
+    $cartData = [
+        'image_custom' => $image,
+        'cart_total' => $money,
+        'cart_date' => now(),
+        'status' => 1,
+        'user_id' => 1,
+        'payment_id' => 1,
+        'product_id' => 1,
+    ];
+
+    $cartDetailData = [
+        'money' => $money,
+        'recipient_email' => $email,
+        'quantity' => 1,
+    ];
+
     
+
+    session(['cart' => $cartData]);
+    session(['cart_detail' => $cartDetailData]);
+
     // Lưu vào bảng carts
-    $cartId = DB::table('carts')->insertGetId([
-        'image_custom' => $fileName, // Lưu tên file hình ảnh
-        'cart_total' => $money, // Ví dụ
-        'cart_date' => now(), // Ví dụ
-        'status' => 1, // Ví dụ
-        'user_id' => Auth::user()->id, // Lấy ID người dùng hiện tại
-        'payment_id' => 1, // Ví dụ
-        'product_id' => $id, // Lấy ID sản phẩm
-    ]);
+    // $cartId = DB::table('carts')->insertGetId([
+    //     'image_custom' => $image, // Lưu tên file hình ảnh
+    //     'cart_total' => $money, // Ví dụ
+    //     'cart_date' => now(), // Ví dụ
+    //     'status' => 1, // Ví dụ
+    //     'user_id' => Auth::user()->id, // Lấy ID người dùng hiện tại
+    //     'payment_id' => 1, // Ví dụ
+    //     'product_id' => $id, // Lấy ID sản phẩm
+    // ]);
     
-    DB::table('cart_detail')->insert([
-        'cart_id' => $cartId, // ID của cart vừa tạo
-        // 'product_id' => $id, // ID sản phẩm
-        'money' => $money, // Giá sản phẩm
-        'recipient_email' => 'minhtruongdong@gmail.com',
-        'quantity' => 1, // Số lượng, có thể thay đổi theo yêu cầu
-    ]);
+    // DB::table('cart_detail')->insert([
+    //     'cart_id' => $cartId, // ID của cart vừa tạo
+    //     // 'product_id' => $id, // ID sản phẩm
+    //     'money' => $money, // Giá sản phẩm
+    //     'recipient_email' => $email,
+    //     'quantity' => 1, 
+    // ]);
     
-    return response()->json(['success' => 'Hình ảnh đã được lưu thành công!']);
+    return response()->json(['success' => true]);
+}
+public function showCart()
+{
+    // Lấy dữ liệu giỏ hàng từ session
+    $cart = session('cart');
+    $cartDetail = session('cart_detail');
+    
+    // Kiểm tra xem dữ liệu giỏ hàng có tồn tại không
+    // if (!$cart || !$cartDetail) {
+    //     return redirect()->route('client.index');// Hiển thị view giỏ hàng trống nếu không có dữ liệu
+    // }
+
+    // Truyền dữ liệu giỏ hàng đến view
+    return view('client.pages.cart.cart', [
+        'cart' => $cart,
+        'cartDetail' => $cartDetail,
+    ]);
 }
 }
