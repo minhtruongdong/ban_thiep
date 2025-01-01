@@ -2,7 +2,7 @@
 @push('css')
 <style>
     .container{
-    
+
         max-width: 800px;
         margin: auto;
         background: white;
@@ -10,7 +10,7 @@
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    
+
     .container.cart_container{
         margin-top:100px;
     }
@@ -92,19 +92,19 @@
         font-size: 18px;
         margin-top: 20px;
     }
-    
+
     .checkout_payment{
         float: right;
         padding: 10px 20px;
         background-color: #45a049;
         color: #f2f2f2;
     }
-    
+
     </style>
-    
-    
+
+
 @endpush
-    
+
 
 @section('content')
 
@@ -116,7 +116,7 @@
                 <th>Image</th>
                 <th>Sản phẩm</th>
                 <th>Giá</th>
-                
+
                 <th>Số lượng</th>
                 <th>Tổng</th>
                 <th>Hành động</th>
@@ -133,36 +133,39 @@
             </tr>
         </tbody>
     </table> --}}
-    
+
     <table id="cartTable">
-        
-        
+
+
             <thead>
                 <tr>
                     <th>Hình Ảnh</th>
                     <th>ID Sản Phẩm</th>
                     <th>Tổng Giá</th>
                     <th>Email Người Nhận</th>
-                    <th>Số Lượng</th>
+                    <th>Số lượng</th>
+                    <th>Hành Động</th>
                 </tr>
             </thead>
             <tbody>
+                @foreach($cart as $item)
                 <tr>
-                    <td>
-                        <img src="{{ asset('custom_images/' . session('cart.image_custom')) }}" alt="Hình Ảnh Sản Phẩm" style="width: 100px;">
-                    </td>
-                    <td>{{ $cart->cart_total }}</td>
-                    <td>{{ number_format(session('cart.cart_total'), 0, ',', '.') }} VND</td>
-                    <td>{{ session('cart_detail.recipient_email') }}</td>
-                    <td>{{ session('cart_detail.quantity') }}</td>
+
+                    <td><img src="{{ asset('custom_images/' . $item['image_custom']) }}" alt="Product Image" width="200px" height="250px"></td>
+                    <td></td>
+                    <td>{{$item['cart_total']}}</td>
+                    <td>{{$item['recipient_email']}}</td>
+
                 </tr>
+                @endforeach
             </tbody>
-        
+
         {{-- @else
             <td><p>Giỏ hàng của bạn đang trống.</p></td>
         @endif --}}
     </table>
-    <div id="total">Tổng cộng: {{number_format(Cart::getSubTotal(),0,"",".")}}VND</div>
+    <div id="total">Tổng cộng: {{number_format($item['cart_total'],0,"",".")}}VND</div>
+
     <div class="empty-space h25-xs h30-md"></div>
     <button> <a href="{{route('client.checkout')}}" class="checkout_payment">Thanh Toan</a> </button>
     <form action="{{route('client.checkoutvnpay_payment')}}" method="POST">
